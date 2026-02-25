@@ -1,0 +1,21 @@
+{
+  "name": "@car-auction/shared",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": "./index.js",
+    "./components": "./components/index.js",
+    "./utils": "./utils/index.js",
+    "./hooks": "./hooks/index.js",
+    "./constants": "./constants/index.js"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
+  }
+}
