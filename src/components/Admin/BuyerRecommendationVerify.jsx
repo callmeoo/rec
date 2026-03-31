@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, TrendingUp, Eye, DollarSign, MapPin, Calendar, Gauge, Award, Clock, Globe, Car, Tag } from 'lucide-react';
+import { Search, User, TrendingUp, Eye, DollarSign, MapPin, Calendar, Gauge, Award, Clock, Globe, Car, Tag, ChevronDown, ChevronUp } from 'lucide-react';
 
 const BuyerRecommendationVerify = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -7,6 +7,7 @@ const BuyerRecommendationVerify = () => {
   const [buyerProfile, setBuyerProfile] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [profileCollapsed, setProfileCollapsed] = useState(false);
 
   // 模拟买家数据（支持ID、姓名、手机号查询）
   const mockBuyers = [
@@ -324,7 +325,7 @@ const BuyerRecommendationVerify = () => {
       {/* Buyer Profile Section */}
       {buyerProfile && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-slate-200 px-6 py-4">
-          <div className="mb-3">
+          <div className="mb-3 flex items-center justify-between">
             <h2 className="text-base font-semibold text-slate-900 flex items-center gap-2">
               <User className="text-blue-600" size={18} />
               买家画像分析
@@ -332,8 +333,25 @@ const BuyerRecommendationVerify = () => {
                 （基于最近90天 {buyerProfile.bidCount} 次出价，{buyerProfile.bidVehicleCount} 台车辆）
               </span>
             </h2>
+            <button
+              onClick={() => setProfileCollapsed(!profileCollapsed)}
+              className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 rounded-lg border border-slate-200 transition-colors"
+            >
+              {profileCollapsed ? (
+                <>
+                  <ChevronDown size={16} />
+                  <span>展开</span>
+                </>
+              ) : (
+                <>
+                  <ChevronUp size={16} />
+                  <span>收起</span>
+                </>
+              )}
+            </button>
           </div>
 
+          {!profileCollapsed && (
           <div className="grid grid-cols-5 gap-3">
             {/* 主打国别 */}
             <div className="bg-white rounded-lg p-3 shadow-sm">
@@ -455,6 +473,7 @@ const BuyerRecommendationVerify = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
       )}
 
