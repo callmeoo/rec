@@ -93,3 +93,12 @@ src/
 
 **项目状态**: ✅ 已完成（待API对接）
 **最后更新**: 2026-01-28
+
+
+git init -b main
+git add .
+git commit -m "First comment"
+
+git remote add origin https://github.com/andi20190206/recommendation.git
+git branch -M main
+git push -u origin main

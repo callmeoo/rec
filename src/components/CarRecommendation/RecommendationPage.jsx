@@ -95,9 +95,7 @@ const RecommendationPage = ({ onVehicleClick }) => {
               <TrendingUp className="text-blue-600" size={24} />
               为您推荐
             </h1>
-            <p className="text-xs md:text-sm text-slate-500 mt-1">
-              基于您的浏览记录和偏好为您推荐
-            </p>
+
           </div>
         </div>
       </div>

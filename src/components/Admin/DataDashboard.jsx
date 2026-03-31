@@ -423,22 +423,7 @@ const DataDashboard = () => {
                   <strong>数据范围：</strong>仅统计移动端数据（PC端流量较低，不纳入统计）。
                 </p>
                 <p>
-                  <strong>已埋点事件：</strong>
-                </p>
-                <ul className="list-disc list-inside ml-2 space-y-1">
-                  <li>推荐模块曝光（移动端）</li>
-                  <li>车辆卡片点击（包含位置、候选集等信息）</li>
-                  <li>页面浏览</li>
-                  <li>刷新操作</li>
-                </ul>
-                <p className="mt-2">
-                  <strong>数据查看：</strong>所有埋点数据在开发环境下会打印到浏览器控制台，生产环境将发送到友盟服务器。
-                </p>
-                <p>
                   <strong>日期范围：</strong>可选择近7天、30天或90天的数据趋势，数据会根据选择的日期范围动态生成。
-                </p>
-                <p>
-                  详细集成说明请查看：<code className="bg-blue-100 px-1 py-0.5 rounded">友盟埋点集成说明.md</code>
                 </p>
               </div>
             </div>

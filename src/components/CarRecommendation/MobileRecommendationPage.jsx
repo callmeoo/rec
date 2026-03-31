@@ -280,9 +280,7 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
               <TrendingUp className="text-blue-600" size={20} />
               为您推荐
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
-              基于您的浏览记录和偏好
-            </p>
+
           </div>
         </div>
       </div>
