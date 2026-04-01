@@ -52,22 +52,22 @@ export const FeatureOverview = () => (
 
       <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">1、买家画像</h3>
       <p className="text-slate-700 mb-2">
-        位置：BMS管理后台→买家管理→买家详情；用户画像tab
+        位置：BMS管理后台 - 买家管理 - 买家详情：用户画像tab
       </p>
       <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-        <li>（1）、数据标签：国别（按占比排序）、出价及次数（作为出价次数/出价台次/N），出价台次</li>
-        <li>（2）、价格段偏好：0-3万、3-5万、5-8万、8-15万、15-20万、20万以上</li>
+        <li>（1）、新增标签：国别（按占比排序）、出价次数（1台车出价N次计为N）、出价台次</li>
+        <li>（2）、价格段调整：0-3万、3-5万、5-8万、8-15万、15-20万、20万以上；系统按新的价格段重跑一遍已有画像数据</li>
+        <li>（3）、新增"出价偏好"：集中度标签由系统自动根据选定属性值（国别、品牌车系、车龄、价格段）占比，选出占比由高到低累加，直到覆盖 60–80% 的出价量，组成长期出价偏好标签</li>
       </ul>
-      <p className="text-slate-700 mb-2">
-        买家数据维度包括但不限于：买家基本信息标签
-      </p>
-      <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-        <li>（3）、显示"出价频率"、"集中偏好"</li>
-      </ul>
-      <p className="text-slate-700 mb-4">
-        由系统自动根据该买家偏好（国别、品牌名、车龄、价格段）比较，找出占比最高的
-        数据，直到匹配 60~80% 的车位置，组成初始推荐列表。
-      </p>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 my-4">
+        <p className="text-xs text-amber-700 mb-2 font-semibold">📌 参考截图（黄色遮罩层为新增功能点或已有功能调整点）</p>
+        <img 
+          src="/buyer-profile-screenshot.png" 
+          alt="买家画像需求截图" 
+          className="w-full rounded border border-slate-200"
+        />
+      </div>
 
       <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2、车辆周转分计算（候选集2）</h3>
       <p className="text-slate-700 mb-2">
