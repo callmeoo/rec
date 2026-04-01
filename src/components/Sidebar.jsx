@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, BookOpen, Settings, BarChart2, ChevronLeft, ChevronRight, Database, ExternalLink, TrendingUp, Car } from 'lucide-react';
+import { Users, BookOpen, Settings, BarChart2, ChevronLeft, ChevronRight, Database, ExternalLink, TrendingUp, Car, FileText, Info } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
@@ -16,6 +16,15 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             icon: BarChart2,
             label: '推荐管理',
             subItems: ['推荐算法验证', '平台周转排行', '推荐数据看板']
+        },
+        {
+            icon: FileText,
+            label: '版本说明'
+        },
+        {
+            icon: Info,
+            label: '功能说明',
+            subItems: ['概要', '推荐策略', '埋点', '可配置参数', '发布策略']
         }
     ];
 

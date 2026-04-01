@@ -7,6 +7,8 @@ import SimpleVehicleDetailPage from './components/VehicleDetail/SimpleVehicleDet
 import BuyerRecommendationVerify from './components/Admin/BuyerRecommendationVerify';
 import TurnoverRanking from './components/Admin/TurnoverRanking';
 import DataDashboard from './components/Admin/DataDashboard';
+import VersionHistory from './components/Docs/VersionHistory';
+import { FeatureOverview, RecommendStrategy, TrackingDocs, ConfigParams, ReleaseStrategy } from './components/Docs/FeatureDocs';
 
 function App() {
   const [activeTab, setActiveTab] = useState('为您推荐（PC端）');
@@ -23,11 +25,23 @@ function App() {
       {activeTab === '推荐算法验证' && <BuyerRecommendationVerify />}
       {activeTab === '平台周转排行' && <TurnoverRanking onVehicleClick={setSelectedVehicleId} />}
       {activeTab === '推荐数据看板' && <DataDashboard />}
+      {activeTab === '版本说明' && <VersionHistory />}
+      {activeTab === '概要' && <FeatureOverview />}
+      {activeTab === '推荐策略' && <RecommendStrategy />}
+      {activeTab === '埋点' && <TrackingDocs />}
+      {activeTab === '可配置参数' && <ConfigParams />}
+      {activeTab === '发布策略' && <ReleaseStrategy />}
       {activeTab !== '为您推荐（PC端）' && 
        activeTab !== '为您推荐（移动端）' && 
        activeTab !== '推荐算法验证' && 
        activeTab !== '平台周转排行' && 
        activeTab !== '推荐数据看板' && 
+       activeTab !== '版本说明' &&
+       activeTab !== '概要' &&
+       activeTab !== '推荐策略' &&
+       activeTab !== '埋点' &&
+       activeTab !== '可配置参数' &&
+       activeTab !== '发布策略' &&
        activeTab !== '课程开发' && 
        activeTab !== '邀请成员' && 
        activeTab !== '授权管理' && (
