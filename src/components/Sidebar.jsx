@@ -8,23 +8,23 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
     const menuItems = [
         {
+            icon: FileText,
+            label: '版本说明'
+        },
+        {
             icon: TrendingUp,
             label: '为您推荐',
             subItems: ['为您推荐（PC端）', '为您推荐（移动端）']
         },
         {
-            icon: BarChart2,
-            label: '推荐管理',
-            subItems: ['推荐算法验证', '平台周转排行', '推荐数据看板']
-        },
-        {
-            icon: FileText,
-            label: '版本说明'
-        },
-        {
             icon: Info,
             label: '功能说明',
             subItems: ['概要', '推荐策略', '埋点', '可配置参数', '发布策略']
+        },
+        {
+            icon: BarChart2,
+            label: '推荐管理',
+            subItems: ['推荐算法验证', '平台周转排行', '推荐数据看板']
         }
     ];
 
