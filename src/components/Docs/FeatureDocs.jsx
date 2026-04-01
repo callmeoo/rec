@@ -75,7 +75,7 @@ export const FeatureOverview = () => (
           <img 
             src={new URL('/buyer-profile-screenshot.png', import.meta.url).href}
             alt="买家画像需求截图" 
-            className="w-full rounded border border-slate-200"
+            className="w-1/2 rounded border border-slate-200"
             onError={(e) => { e.target.style.display = 'none'; }}
           />
         </div>
