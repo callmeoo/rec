@@ -135,7 +135,7 @@ const NewStyleCarCard = ({ car, onLike, onView, onVehicleClick, isLiked, index }
         <div className="flex gap-1 flex-wrap mt-1.5">
           {showCrowd && <span className="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-px rounded font-medium">{crowdCount}人围观</span>}
           {showIntent && <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-px rounded font-medium">多人意向</span>}
-          {showTurnover && <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-px rounded font-medium">快速周转</span>}
+          {showTurnover && <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-px rounded font-medium">周转快</span>}
         </div>
         <div className="flex items-end justify-between mt-1.5">
           <span className="text-base font-bold text-red-600">{formatPrice(car.price)}起</span>
@@ -415,7 +415,7 @@ const SearchNoResultNew = ({ isLoggedIn, recommendations }) => (
                 <div className="flex gap-1 flex-wrap mb-1">
                   {idx === 0 && <span className="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-px rounded font-medium">20人围观</span>}
                   {idx < 2 && <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-px rounded font-medium">多人意向</span>}
-                  <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-px rounded font-medium">快速周转</span>
+                  <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-px rounded font-medium">周转快</span>
                 </div>
                 <div className="flex items-end justify-between">
                   <span className="text-sm font-bold text-red-600">{(car.price / 10000).toFixed(1)}万起</span>

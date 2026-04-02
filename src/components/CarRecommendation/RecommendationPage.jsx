@@ -113,7 +113,7 @@ const RecommendationPage = ({ onVehicleClick }) => {
                   登录后查看您的专属推荐车源
                 </p>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  基于您的浏览和出价记录，为您智能推荐更匹配的车辆
+                  搜索结果页底部展示推荐车辆
                 </p>
               </div>
             </div>

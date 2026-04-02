@@ -844,10 +844,10 @@ export const DisplayRules = () => (
           <li>标签区：</li>
         </ul>
         <p className="text-slate-700 mt-2 ml-4">
-          仅展示促销标签类型，优先级：围观人数、多人意向、快速周转；
+          仅展示促销标签类型，优先级：围观人数、多人意向、周转快；
         </p>
         <p className="text-slate-700 ml-4">
-          如果促销标签都没有出现，展示原有标签（非这3个标签）；
+          如果促销标签都没有出现，则不展示；
         </p>
         <div className="ml-4 mt-2 space-y-1 text-slate-700">
           <p>促销标签1（热度）："x人围观" —— 车辆浏览人数*2。</p>
