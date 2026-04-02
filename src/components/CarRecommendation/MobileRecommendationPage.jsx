@@ -83,6 +83,71 @@ const MobileCarCard = ({ car, onLike, onView, onVehicleClick, isLiked }) => {
   );
 };
 
+/* ─── 新样式车辆卡片（无专业检测、年月格式、含推荐标签） ─── */
+const NewStyleCarCard = ({ car, onLike, onView, onVehicleClick, isLiked, index }) => {
+  const [liked, setLiked] = useState(isLiked);
+
+  const handleLike = (e) => {
+    e.stopPropagation();
+    setLiked(!liked);
+    if (!liked) onLike(car.id);
+  };
+
+  const handleCardClick = () => {
+    onView(car.id);
+    if (car.status === 'removed') { alert('该车辆已下架，请刷新页面'); return; }
+    if (car.status === 'ended') { alert('该车辆竞价已结束，请刷新页面'); return; }
+    if (onVehicleClick) onVehicleClick(car.id);
+  };
+
+  const formatPrice = (p) => (p / 10000).toFixed(1) + '万';
+  const getConditionGrade = () => {
+    if (!car.conditionScore) return '';
+    const s = car.conditionScore;
+    if (s >= 90) return 'A';
+    if (s >= 80) return 'B';
+    if (s >= 70) return 'C';
+    return 'D';
+  };
+
+  // 模拟促销标签
+  const showCrowd = index % 3 === 0 || index % 4 === 0;
+  const showIntent = index % 2 === 0;
+  const showTurnover = index % 3 !== 1;
+  const crowdCount = 10 + (index * 7) % 30;
+
+  return (
+    <div onClick={handleCardClick} className="bg-white rounded-lg overflow-hidden active:opacity-90 transition-opacity">
+      <div className="relative aspect-[4/3] bg-gray-100">
+        <img src={car.image} alt={car.name} className="w-full h-full object-cover" />
+        {car.conditionScore && (
+          <div className="absolute top-2 right-2 bg-slate-800/80 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
+            {car.conditionScore}{getConditionGrade()}
+          </div>
+        )}
+      </div>
+      <div className="px-2 pt-2 pb-3">
+        <h3 className="text-[13px] font-semibold text-gray-900 leading-snug line-clamp-2 mb-1">{car.name}</h3>
+        <p className="text-[11px] text-gray-400 mt-1 truncate">
+          {car.year}-01 | {(car.mileage / 10000).toFixed(2)}万公里 | {car.location} | {car.transferCount || 0}
+        </p>
+        {/* 推荐标签 */}
+        <div className="flex gap-1 flex-wrap mt-1.5">
+          {showCrowd && <span className="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-px rounded font-medium">{crowdCount}人围观</span>}
+          {showIntent && <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-px rounded font-medium">多人意向</span>}
+          {showTurnover && <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-px rounded font-medium">快速周转</span>}
+        </div>
+        <div className="flex items-end justify-between mt-1.5">
+          <span className="text-base font-bold text-red-600">{formatPrice(car.price)}起</span>
+          <button onClick={handleLike} className={clsx('p-1 rounded-full', liked ? 'text-red-500' : 'text-gray-300')}>
+            <Heart size={16} fill={liked ? 'currentColor' : 'none'} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 /* ─── 底部 Tab 栏 ─── */
 const BottomTabBar = () => (
   <div className="flex items-center justify-around bg-white border-t border-gray-200 py-2 px-2">
@@ -125,7 +190,7 @@ const MobilePhoneFrameOld = ({ recommendations, loading }) => (
 
       {/* 猜你喜欢标题（现有样式） */}
       <div className="flex items-center justify-center py-3">
-        <span className="text-base font-bold text-gray-900">猜你喜欢</span>
+        <span className="text-base font-bold text-gray-900">为您推荐</span>
       </div>
 
       {/* 车辆列表（无个性化，简单双列） */}
@@ -210,10 +275,11 @@ const MobilePhoneFrame = ({ isLoggedIn, recommendations, loading, onLike, onView
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-2.5">
-            {recommendations.map((car) => (
-              <MobileCarCard
+            {recommendations.map((car, idx) => (
+              <NewStyleCarCard
                 key={car.id}
                 car={car}
+                index={idx}
                 onLike={onLike}
                 onView={onView}
                 onVehicleClick={onVehicleClick}
