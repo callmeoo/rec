@@ -56,7 +56,7 @@ export const FeatureOverview = () => {
             在B2B二手车拍卖中，信息分散与效率瓶颈是核心痛点。目前平台缺乏个性化引擎，获客成本高。
           </p>
           <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-            <li>核心目标：推荐模块到场出价率（基线：X%，取上线前30天均值）在正式上线14天后达到 X+110%。</li>
+            <li>核心目标：推荐模块曝光出价率（基线：X%，取上线前30天均值）在正式上线14天后达到 X+110%。</li>
             <li>辅助目标：猜你喜欢模块的CTR较基线提升 &gt; 5%。</li>
           </ul>
           <p className="text-slate-700 mb-2">
@@ -268,7 +268,7 @@ export const RecommendStrategy = () => {
 
           <h3 className="text-base font-semibold text-slate-800 mb-2">2、前端展示</h3>
           <p className="text-slate-700">
-            全平台上拍车辆的15%：（按照每日上架不足200台，为您推荐固定展示<span className="font-semibold text-blue-700">16台</span>车，<span className="text-red-600">可配</span>）
+            全平台上拍车辆的15%：（按照每日上架不足200台，为您推荐展示<span className="font-semibold text-blue-700">16台-28台</span>车，<span className="text-red-600">后台可配</span>）
           </p>
         </div>
       )}
@@ -325,7 +325,7 @@ export const RecommendStrategy = () => {
             <h4 className="text-sm font-bold text-green-700 mb-2">候选集 2（平台周转）</h4>
             <ul className="list-disc list-inside space-y-1.5 text-slate-700">
               <li>全站周转分 <span className="font-semibold">TOP 50</span> 车系</li>
-              <li>同车系占比 <span className="font-semibold text-red-600">≤ 40%</span></li>
+              <li>同品牌占比 <span className="font-semibold text-red-600">≤ 40%</span></li>
               <li>候选集内的车辆周转分要 <span className="font-semibold text-red-600">大于 60</span></li>
             </ul>
           </div>
