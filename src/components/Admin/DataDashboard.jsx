@@ -62,10 +62,9 @@ const DataDashboard = () => {
         { name: '初始默认', exposureCount: 1500, clickCount: 80, color: 'bg-purple-500' }
       ],
       positionPerformance: [
-        { position: '1-3位', exposure: 38000, clicks: 3420, ctr: 9.0, bidRate: 15.2 },
-        { position: '4-6位', exposure: 35000, clicks: 2800, ctr: 8.0, bidRate: 13.5 },
-        { position: '7-10位', exposure: 32000, clicks: 2240, ctr: 7.0, bidRate: 11.8 },
-        { position: '10位后', exposure: 20680, clicks: 485, ctr: 2.3, bidRate: 5.2 }
+        { position: '1-4位', exposure: 38000, clicks: 3420, ctr: 9.0, bidRate: 15.2 },
+        { position: '5-8位', exposure: 35000, clicks: 2800, ctr: 8.0, bidRate: 13.5 },
+        { position: '8位以后', exposure: 32000, clicks: 2240, ctr: 7.0, bidRate: 11.8 }
       ]
     };
   };
@@ -299,7 +298,27 @@ const DataDashboard = () => {
 
         {/* Candidate Set Distribution */}
         <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">候选集效果分析（移动端）</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-slate-900">候选集效果分析（移动端）</h3>
+            <button
+              onClick={() => {
+                const td = dashboardData.candidateSetDistribution;
+                const tE = td.reduce((s, i) => s + i.exposureCount, 0);
+                const tC = td.reduce((s, i) => s + i.clickCount, 0);
+                const h = ['候选集类型','单车曝光次数','曝光占比','单车点击次数','点击占比','候选集CTR'];
+                const r = td.map(i => [i.name, i.exposureCount, ((i.exposureCount/tE)*100).toFixed(1)+'%', i.clickCount, ((i.clickCount/tC)*100).toFixed(1)+'%', ((i.clickCount/i.exposureCount)*100).toFixed(2)+'%']);
+                const csv = [h, ...r].map(x => x.join(',')).join('\n');
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = '候选集效果分析.csv'; a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              📥 下载CSV
+            </button>
+          </div>
           
           {/* 计算总曝光和总点击 */}
           {(() => {

@@ -531,7 +531,7 @@ export const TrackingDocs = () => {
     { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
     { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
     { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端', disabled: true },
   ];
   const pcEvents = [
     { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：初始default、画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
@@ -619,12 +619,16 @@ export const TrackingDocs = () => {
               <tbody>
                 {/* 移动端埋点 */}
                 {mobileEvents.map((evt) => (
-                  <tr key={evt.name}>
-                    <td className="border border-slate-300 px-3 py-2 font-mono text-xs text-slate-700 whitespace-nowrap">{evt.name}</td>
-                    <td className="border border-slate-300 px-3 py-2 text-slate-700 text-xs">{evt.trigger}</td>
-                    <td className="border border-slate-300 px-3 py-2 text-slate-700 text-xs">{evt.fields}</td>
+                  <tr key={evt.name} className={evt.disabled ? 'bg-gray-100 text-gray-400' : ''}>
+                    <td className={`border border-slate-300 px-3 py-2 font-mono text-xs whitespace-nowrap ${evt.disabled ? '' : 'text-slate-700'}`}>{evt.name}</td>
+                    <td className={`border border-slate-300 px-3 py-2 text-xs ${evt.disabled ? '' : 'text-slate-700'}`}>{evt.trigger}</td>
+                    <td className={`border border-slate-300 px-3 py-2 text-xs ${evt.disabled ? '' : 'text-slate-700'}`}>{evt.fields}</td>
                     <td className="border border-slate-300 px-3 py-2 whitespace-nowrap">
-                      <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">{evt.platform}</span>
+                      {evt.disabled ? (
+                        <span className="px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-500">{evt.platform}（不展示效果分析）</span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">{evt.platform}</span>
+                      )}
                     </td>
                   </tr>
                 ))}
