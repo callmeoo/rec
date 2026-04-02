@@ -19,7 +19,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         {
             icon: Info,
             label: '功能说明',
-            subItems: ['概要', '推荐策略', '埋点', '可配置参数', '发布策略']
+            subItems: ['目标和数据基础', '推荐策略', '埋点', '可配置参数', '发布策略']
         },
         {
             icon: BarChart2,

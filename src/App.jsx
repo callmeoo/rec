@@ -26,7 +26,7 @@ function App() {
       {activeTab === '平台周转排行' && <TurnoverRanking onVehicleClick={setSelectedVehicleId} />}
       {activeTab === '推荐数据看板' && <DataDashboard />}
       {activeTab === '版本说明' && <VersionHistory />}
-      {activeTab === '概要' && <FeatureOverview />}
+      {activeTab === '目标和数据基础' && <FeatureOverview />}
       {activeTab === '推荐策略' && <RecommendStrategy />}
       {activeTab === '埋点' && <TrackingDocs />}
       {activeTab === '可配置参数' && <ConfigParams />}
@@ -37,7 +37,7 @@ function App() {
        activeTab !== '平台周转排行' && 
        activeTab !== '推荐数据看板' && 
        activeTab !== '版本说明' &&
-       activeTab !== '概要' &&
+       activeTab !== '目标和数据基础' &&
        activeTab !== '推荐策略' &&
        activeTab !== '埋点' &&
        activeTab !== '可配置参数' &&
