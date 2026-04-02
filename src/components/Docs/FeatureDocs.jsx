@@ -227,124 +227,154 @@ export const FeatureOverview = () => {
 };
 
 // 推荐策略
-export const RecommendStrategy = () => (
-  <DocPage
-    title="推荐策略"
-    icon={<Target className="text-blue-600" size={28} />}
-    subtitle="数据筛选、候选集、排序与异常处理"
-  >
-    <div className="prose prose-slate max-w-none text-sm leading-relaxed">
+export const RecommendStrategy = () => {
+  const [strategyTab, setStrategyTab] = useState('数据筛选');
+  const tabs = ['数据筛选', '候选集', '排序与异常处理'];
 
-      <CollapsibleSection title="1、数据筛选和过滤" defaultOpen={true}>
-        <ul className="list-disc list-inside space-y-1.5 text-slate-700">
-          <li>车辆状态：<span className="font-semibold">预展中、拍卖中</span></li>
-          <li>过滤车况评级D和火烧车、泡水车（含"水泡"标签）</li>
-          <li>过滤已登录账号已出价车辆</li>
-        </ul>
-      </CollapsibleSection>
+  return (
+    <DocPage
+      title="推荐策略"
+      icon={<Target className="text-blue-600" size={28} />}
+      subtitle="数据筛选、候选集、排序与异常处理"
+    >
+      {/* Tab 切换 */}
+      <div className="flex border-b border-slate-200 mb-6">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setStrategyTab(tab)}
+            className={`px-5 py-2.5 text-sm font-medium transition-colors relative ${
+              strategyTab === tab
+                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600'
+                : 'text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
 
-      <CollapsibleSection title="2、推荐数据" defaultOpen={true}>
+      <div className="prose prose-slate max-w-none text-sm leading-relaxed">
 
-        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-2">2.1、前端展示</h3>
-        <p className="text-slate-700 mb-4">
-          全平台上拍车辆的15%：（按照每日上架不足200台，为您推荐固定展示<span className="font-semibold text-blue-700">16台</span>车，<span className="text-red-600">可配</span>）
-        </p>
+      {/* Tab1: 数据筛选 */}
+      {strategyTab === '数据筛选' && (
+        <div>
+          <h3 className="text-base font-semibold text-slate-800 mb-3">1、数据筛选和过滤</h3>
+          <ul className="list-disc list-inside space-y-1.5 text-slate-700 mb-6">
+            <li>车辆状态：<span className="font-semibold">预展中、拍卖中</span></li>
+            <li>过滤车况评级D和火烧车、泡水车（含"水泡"标签）</li>
+            <li>过滤已登录账号已出价车辆</li>
+          </ul>
 
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-3">2.2、候选集</h3>
+          <h3 className="text-base font-semibold text-slate-800 mb-2">2、前端展示</h3>
+          <p className="text-slate-700">
+            全平台上拍车辆的15%：（按照每日上架不足200台，为您推荐固定展示<span className="font-semibold text-blue-700">16台</span>车，<span className="text-red-600">可配</span>）
+          </p>
+        </div>
+      )}
 
-        <div className="border-l-4 border-blue-500 pl-4 mb-6">
-          <h4 className="text-sm font-bold text-blue-700 mb-2">候选集 1（画像匹配）</h4>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
-            <p className="text-sm font-semibold text-blue-800">Step 1 — 强匹配（优先）</p>
-            <p className="text-slate-700 mt-1">匹配维度：主打车系 + 主打价格段 + 主打车龄（三维全匹配）</p>
-            <p className="text-slate-600 mt-1 text-xs">例如买家标签为"大众迈腾 + 3-5万 + 4-6年"，则严格拉取该交集下的车源。</p>
-            <p className="text-slate-700 mt-1">若结果 ≥ 目标数量 → 直接使用，反之进入 Step 2</p>
-          </div>
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-3">
-            <p className="text-sm font-semibold text-indigo-800">Step 2 — 双维容差匹配（解决临界值流失）</p>
-            <p className="text-slate-700 mt-1">匹配条件：【主打车系】+【价位容差：金额±10%】+【车龄容差：±1年】</p>
-            <p className="text-slate-700 mt-1">触发条件：Step 1 结果 &lt; 16 台。需排除 Step 1 已有的车（按vid去重）。</p>
-            <div className="mt-2 space-y-2 text-xs text-slate-600">
-              <div className="bg-white rounded p-2">
-                <p className="font-semibold text-slate-700">价格容差逻辑：</p>
-                <p>在原价位段基础上，允许上下浮动10%的绝对金额。价格不可为负：当最低价格段为"0-3万"时，向下容差不可出现负数（0万的-10%应设底线为0）。</p>
-                <p className="mt-1">举例：买家标签 3-5万 → 允许推荐起拍价 2.7万（3万-10%）至 5.5万（5万+10%）之间的同车系、同车龄车源。</p>
-              </div>
-              <div className="bg-white rounded p-2">
-                <p className="font-semibold text-slate-700">车龄容差逻辑：</p>
-                <p>在买家主打车龄标签的上下限，各放宽1年。</p>
-                <ul className="list-disc list-inside ml-2 mt-1 space-y-0.5">
-                  <li>主打 4-6年 → 容差扩充为 3-7年</li>
-                  <li>主打 2年以内（0-2年）→ 向下不可为负，容差扩充为 0-3年</li>
-                  <li>主打 10年以上 → 向下放宽1年，向上无上限，容差扩充为 9年以上</li>
-                </ul>
-              </div>
+      {/* Tab2: 候选集 */}
+      {strategyTab === '候选集' && (
+        <div>
+          <div className="border-l-4 border-blue-500 pl-4 mb-6">
+            <h4 className="text-sm font-bold text-blue-700 mb-2">候选集 1（画像匹配）</h4>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+              <p className="text-sm font-semibold text-blue-800">Step 1 — 强匹配（优先）</p>
+              <p className="text-slate-700 mt-1">匹配维度：主打车系 + 主打价格段 + 主打车龄（三维全匹配）</p>
+              <p className="text-slate-600 mt-1 text-xs">例如买家标签为"大众迈腾 + 3-5万 + 4-6年"，则严格拉取该交集下的车源。</p>
+              <p className="text-slate-700 mt-1">若结果 ≥ 目标数量 → 直接使用，反之进入 Step 2</p>
             </div>
-            <p className="text-slate-700 mt-2">若结果 ≥ 目标数量 → 直接使用，反之进入 Step 3</p>
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-3">
+              <p className="text-sm font-semibold text-indigo-800">Step 2 — 双维容差匹配（解决临界值流失）</p>
+              <p className="text-slate-700 mt-1">匹配条件：【主打车系】+【价位容差：金额±10%】+【车龄容差：±1年】</p>
+              <p className="text-slate-700 mt-1">触发条件：Step 1 结果 &lt; 16 台。需排除 Step 1 已有的车（按vid去重）。</p>
+              <div className="mt-2 space-y-2 text-xs text-slate-600">
+                <div className="bg-white rounded p-2">
+                  <p className="font-semibold text-slate-700">价格容差逻辑：</p>
+                  <p>在原价位段基础上，允许上下浮动10%的绝对金额。价格不可为负：当最低价格段为"0-3万"时，向下容差不可出现负数（0万的-10%应设底线为0）。</p>
+                  <p className="mt-1">举例：买家标签 3-5万 → 允许推荐起拍价 2.7万（3万-10%）至 5.5万（5万+10%）之间的同车系、同车龄车源。</p>
+                </div>
+                <div className="bg-white rounded p-2">
+                  <p className="font-semibold text-slate-700">车龄容差逻辑：</p>
+                  <p>在买家主打车龄标签的上下限，各放宽1年。</p>
+                  <ul className="list-disc list-inside ml-2 mt-1 space-y-0.5">
+                    <li>主打 4-6年 → 容差扩充为 3-7年</li>
+                    <li>主打 2年以内（0-2年）→ 向下不可为负，容差扩充为 0-3年</li>
+                    <li>主打 10年以上 → 向下放宽1年，向上无上限，容差扩充为 9年以上</li>
+                  </ul>
+                </div>
+              </div>
+              <p className="text-slate-700 mt-2">若结果 ≥ 目标数量 → 直接使用，反之进入 Step 3</p>
+            </div>
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-3">
+              <p className="text-sm font-semibold text-purple-800">Step 3 — 放弃车系（一级扩展）</p>
+              <p className="text-slate-700 mt-1">匹配维度：主打价格段 + 主打车龄（去掉车系限制）</p>
+              <p className="text-slate-700 mt-1">若结果 ≥ 目标数量 → 使用，反之进入 Step 4</p>
+            </div>
+            <div className="bg-slate-100 border border-slate-300 rounded-lg p-3 mb-3">
+              <p className="text-sm font-semibold text-slate-800">Step 4 — 兜底（二级扩展）</p>
+              <p className="text-slate-700 mt-1">匹配维度：无约束，从候选集2（平台周转TOP50）中补充剩余缺口</p>
+              <p className="text-slate-700 mt-1">若候选集2也不足，则从候选集3（全站兜底）补至目标数量</p>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <p className="text-xs text-amber-700"><span className="font-semibold">去重机制：</span>在经历 Step 1 到 Step 4 的漏斗过滤时，需做去重处理（按vid去重），避免同一台车在前端展示两次。</p>
+            </div>
           </div>
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-3">
-            <p className="text-sm font-semibold text-purple-800">Step 3 — 放弃车系（一级扩展）</p>
-            <p className="text-slate-700 mt-1">匹配维度：主打价格段 + 主打车龄（去掉车系限制）</p>
-            <p className="text-slate-700 mt-1">若结果 ≥ 目标数量 → 使用，反之进入 Step 4</p>
+
+          <div className="border-l-4 border-green-500 pl-4 mb-6">
+            <h4 className="text-sm font-bold text-green-700 mb-2">候选集 2（平台周转）</h4>
+            <ul className="list-disc list-inside space-y-1.5 text-slate-700">
+              <li>全站周转分 <span className="font-semibold">TOP 50</span> 车系</li>
+              <li>同车系占比 <span className="font-semibold text-red-600">≤ 40%</span></li>
+              <li>候选集内的车辆周转分要 <span className="font-semibold text-red-600">大于 60</span></li>
+            </ul>
           </div>
-          <div className="bg-slate-100 border border-slate-300 rounded-lg p-3 mb-3">
-            <p className="text-sm font-semibold text-slate-800">Step 4 — 兜底（二级扩展）</p>
-            <p className="text-slate-700 mt-1">匹配维度：无约束，从候选集2（平台周转TOP50）中补充剩余缺口</p>
-            <p className="text-slate-700 mt-1">若候选集2也不足，则从候选集3（全站兜底）补至目标数量</p>
+
+          <div className="border-l-4 border-gray-400 pl-4 mb-6">
+            <h4 className="text-sm font-bold text-gray-700 mb-2">候选集 3（全站兜底）</h4>
+            <p className="text-slate-700 mb-2">若以上候选结果集都不足，剩余车辆推荐位用"全站热销兜底"。</p>
+            <ul className="list-disc list-inside space-y-1.5 text-slate-700">
+              <li>全站热销：在拍车辆按照<span className="font-semibold">出价次数从高到低</span>排序</li>
+              <li>出价次数一致，按<span className="font-semibold">竞价结束时间升序</span>排列</li>
+              <li>若拍卖结束时间和出价次数都完全相同，则采用<span className="font-semibold">随机排序打散</span></li>
+              <li>在全局过滤规则外，候选集3<span className="font-semibold text-red-600">排除当前出价次数为0的车辆</span></li>
+            </ul>
           </div>
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-            <p className="text-xs text-amber-700"><span className="font-semibold">去重机制：</span>在经历 Step 1 到 Step 4 的漏斗过滤时，拉取的数据集可能会有重合，需做去重处理（按vid去重），避免同一台车在前端展示两次。</p>
+
+          <h4 className="text-sm font-semibold text-slate-800 mt-4 mb-2">用户未登录情况下的推荐集</h4>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-800">取：<span className="font-semibold">候选集2 &amp; 候选集3</span> 数据</p>
           </div>
         </div>
+      )}
 
-        <div className="border-l-4 border-green-500 pl-4 mb-6">
-          <h4 className="text-sm font-bold text-green-700 mb-2">候选集 2（平台周转）</h4>
+      {/* Tab3: 排序与异常处理 */}
+      {strategyTab === '排序与异常处理' && (
+        <div>
+          <h3 className="text-base font-semibold text-slate-800 mb-2">排序规则</h3>
+          <ul className="list-disc list-inside space-y-1.5 text-slate-700 mb-3">
+            <li>同一个候选集：按【拍卖结束时间（升序）】</li>
+            <li>拍卖结束时间相同，按出价次数（降序）</li>
+            <li>若拍卖结束时间和出价次数相同，随机排序</li>
+          </ul>
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+            <p className="text-xs text-amber-700"><span className="font-semibold">打散策略：</span>前 10 位中，同一品牌连续 ≤ 3 台，同一车系连续 ≤ 3 台。</p>
+          </div>
+
+          <h3 className="text-base font-semibold text-slate-800 mb-2">异常处理</h3>
+          <p className="text-slate-700 mb-2">为保障系统高可用，当推荐服务出现故障，接口超时未返回，则直接调用<span className="font-semibold">缓存</span>中的上一次计算结果。</p>
           <ul className="list-disc list-inside space-y-1.5 text-slate-700">
-            <li>全站周转分 <span className="font-semibold">TOP 50</span> 车系</li>
-            <li>同车系占比 <span className="font-semibold text-red-600">≤ 40%</span></li>
-            <li>候选集内的车辆周转分要 <span className="font-semibold text-red-600">大于 60</span></li>
+            <li>在读取缓存列表后，将状态不符（已拍卖结束）的车辆从缓存中过滤</li>
+            <li>若数量不足，则用候选集3（全站热销兜底）进行补充</li>
+            <li>三个候选集合并后仍不足16台时，<span className="font-semibold">保持实际数量展示，不强制补满</span></li>
           </ul>
         </div>
+      )}
 
-        <div className="border-l-4 border-gray-400 pl-4 mb-6">
-          <h4 className="text-sm font-bold text-gray-700 mb-2">候选集 3（全站兜底）</h4>
-          <p className="text-slate-700 mb-2">若以上候选结果集都不足，剩余车辆推荐位用"全站热销兜底"。</p>
-          <ul className="list-disc list-inside space-y-1.5 text-slate-700">
-            <li>全站热销：在拍车辆按照<span className="font-semibold">出价次数从高到低</span>排序</li>
-            <li>出价次数一致，按<span className="font-semibold">竞价结束时间升序</span>排列</li>
-            <li>若拍卖结束时间和出价次数都完全相同，则采用<span className="font-semibold">随机排序打散</span></li>
-            <li>在全局过滤规则外，候选集3<span className="font-semibold text-red-600">排除当前出价次数为0的车辆</span></li>
-          </ul>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2.3、排序规则</h3>
-        <ul className="list-disc list-inside space-y-1.5 text-slate-700 mb-3">
-          <li>同一个候选集：按【拍卖结束时间（升序）】</li>
-          <li>拍卖结束时间相同，按出价次数（降序）</li>
-          <li>若拍卖结束时间和出价次数相同，随机排序</li>
-        </ul>
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
-          <p className="text-xs text-amber-700"><span className="font-semibold">打散策略：</span>前 10 位中，同一品牌连续 ≤ 3 台，同一车系连续 ≤ 3 台。</p>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2.4、异常处理</h3>
-        <p className="text-slate-700 mb-2">为保障系统高可用，当推荐服务出现故障，接口超时未返回，则直接调用<span className="font-semibold">缓存</span>中的上一次计算结果。</p>
-        <ul className="list-disc list-inside space-y-1.5 text-slate-700 mb-3">
-          <li>在读取缓存列表后，将状态不符（已拍卖结束）的车辆从缓存中过滤</li>
-          <li>若数量不足，则用候选集3（全站热销兜底）进行补充</li>
-          <li>三个候选集合并后仍不足16台时，<span className="font-semibold">保持实际数量展示，不强制补满</span></li>
-        </ul>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2.5、用户未登录情况下的推荐集</h3>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <p className="text-sm text-blue-800">取：<span className="font-semibold">候选集2 &amp; 候选集3</span> 数据</p>
-        </div>
-
-      </CollapsibleSection>
-
-    </div>
-  </DocPage>
-);
+      </div>
+    </DocPage>
+  );
+};
 
 export const TrackingDocs = () => {
   const mobileEvents = [
