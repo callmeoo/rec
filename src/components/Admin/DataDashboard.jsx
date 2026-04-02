@@ -114,9 +114,23 @@ const DataDashboard = () => {
               className="flex-1 sm:flex-none px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             >
               <option value="7">近7天</option>
+              <option value="14">近14天</option>
               <option value="30">近30天</option>
-              <option value="90">近90天</option>
             </select>
+            <div className="flex items-center gap-1">
+              <input
+                type="date"
+                className="px-2 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => {
+                  if (e.target.value) setDateRange('custom');
+                }}
+              />
+              <span className="text-slate-400 text-sm">~</span>
+              <input
+                type="date"
+                className="px-2 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -133,7 +147,6 @@ const DataDashboard = () => {
             <div className="text-2xl font-bold text-slate-900">
               {dashboardData.overview.totalExposure.toLocaleString()}
             </div>
-            <div className="text-xs text-green-600 mt-1">↑ 12.5% vs 上周</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -144,7 +157,6 @@ const DataDashboard = () => {
             <div className="text-2xl font-bold text-slate-900">
               {dashboardData.overview.totalClicks.toLocaleString()}
             </div>
-            <div className="text-xs text-green-600 mt-1">↑ 8.3% vs 上周</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -155,7 +167,6 @@ const DataDashboard = () => {
             <div className="text-2xl font-bold text-slate-900">
               {dashboardData.overview.ctr}%
             </div>
-            <div className="text-xs text-red-600 mt-1">↓ 0.5% vs 上周</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -166,18 +177,16 @@ const DataDashboard = () => {
             <div className="text-2xl font-bold text-slate-900">
               {dashboardData.overview.bidRate}%
             </div>
-            <div className="text-xs text-green-600 mt-1">↑ 2.1% vs 上周</div>
           </div>
 
           <div className="bg-white rounded-lg p-4 shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-slate-500">平均出价</span>
+              <span className="text-sm text-slate-500">出价次数</span>
               <Users size={18} className="text-red-500" />
             </div>
             <div className="text-2xl font-bold text-slate-900">
               {dashboardData.overview.avgBidAmount}万
             </div>
-            <div className="text-xs text-green-600 mt-1">↑ 5.2% vs 上周</div>
           </div>
         </div>
 
@@ -188,7 +197,31 @@ const DataDashboard = () => {
             className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors"
           >
             <h3 className="text-lg font-semibold text-slate-900">趋势分析</h3>
-            <span className="text-slate-400 text-sm">{trendCollapsed ? '▶ 展开' : '▼ 收起'}</span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  const headers = ['日期', '曝光量', '点击量', '点击率', '出价台次', '出价率'];
+                  const rows = dashboardData.trend.dates.map((date, i) => {
+                    const exp = dashboardData.trend.exposure[i];
+                    const clk = dashboardData.trend.clicks[i];
+                    const bid = dashboardData.trend.bids[i];
+                    return [date, exp, clk, ((clk/exp)*100).toFixed(2)+'%', bid, ((bid/clk)*100).toFixed(2)+'%'];
+                  });
+                  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+                  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `趋势分析_近${dateRange}天.csv`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                📥 下载CSV
+              </button>
+              <span className="text-slate-400 text-sm">{trendCollapsed ? '▶ 展开' : '▼ 收起'}</span>
+            </div>
           </button>
           {!trendCollapsed && (
           <div className="px-6 pb-6">
