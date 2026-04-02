@@ -526,20 +526,20 @@ export const RecommendStrategy = () => (
 // 埋点
 export const TrackingDocs = () => {
   const mobileEvents = [
-    { name: 'rec_show_m', trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: '移动端' },
-    { name: 'rec_click_m', trigger: 'Mob点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'rec_show_m', trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：初始default、画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: '移动端' },
+    { name: 'rec_click_m', trigger: 'Mob点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
   ];
   const pcEvents = [
-    { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
-    { name: 'rec_click_pc', trigger: 'PC端点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'aucdetail_view_pc', trigger: 'PC端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'bid_start_pc', trigger: 'PC端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'bid_submit_pc', trigger: 'PC端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'bid_success_pc', trigger: 'PC端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：初始default、画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
+    { name: 'rec_click_pc', trigger: 'PC端点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'aucdetail_view_pc', trigger: 'PC端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_start_pc', trigger: 'PC端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_submit_pc', trigger: 'PC端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_success_pc', trigger: 'PC端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: 'PC端' },
   ];
 
   return (
@@ -697,7 +697,7 @@ export const ReleaseStrategy = () => {
         {activePhase === '阶段一' && (
           <div>
             <p className="text-slate-700 mb-4">
-              仅上线 BMS 后台验证功能，使用 2–3 周进行规则验证和微调。
+              上线 BMS 推荐管理功能，上线推荐埋点，使用 2–3 周进行规则验证和微调。
             </p>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm">
