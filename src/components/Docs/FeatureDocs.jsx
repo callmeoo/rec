@@ -186,293 +186,111 @@ export const FeatureOverview = () => (
 // 推荐策略
 export const RecommendStrategy = () => (
   <DocPage
-    title="推荐策略"
+    title="四、推荐策略"
     icon={<Target className="text-blue-600" size={28} />}
-    subtitle="推荐算法与候选集策略说明"
+    subtitle="数据筛选、候选集生成与打散规则"
   >
     <div className="prose prose-slate max-w-none text-sm leading-relaxed">
 
-      {/* 一、推荐整体流程 */}
-      <CollapsibleSection title="一、推荐整体流程" defaultOpen={true}>
-        <p className="text-slate-700 mb-3">
-          推荐系统遵循 <span className="font-semibold text-slate-900">"画像识别 → 候选拉取 → 过滤排序 → 打散 → 前端展示"</span> 的流程。
-        </p>
-        <p className="text-slate-700 mb-3">
-          每位买家最终展示 <span className="font-semibold text-blue-700">16 台</span> 推荐车辆，由三个候选集按优先级依次填充。
-        </p>
-
-        {/* 流程图 */}
-        <div className="flex items-center gap-2 flex-wrap my-4">
-          {['买家画像', '候选集1\n画像匹配', '候选集2\n平台周转', '候选集3\n全站兜底', '打散策略', '前端展示\n16台'].map((step, i, arr) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className={`px-3 py-2 rounded-lg text-xs font-semibold text-center whitespace-pre-line leading-tight ${
-                i === 0 ? 'bg-purple-100 text-purple-700 border border-purple-200' :
-                i <= 3 ? 'bg-blue-50 text-blue-700 border border-blue-200' :
-                i === 4 ? 'bg-amber-50 text-amber-700 border border-amber-200' :
-                'bg-green-50 text-green-700 border border-green-200'
-              }`}>
-                {step}
-              </div>
-              {i < arr.length - 1 && <span className="text-slate-400 text-lg">→</span>}
-            </div>
-          ))}
-        </div>
-
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mt-4">
-          <p className="text-xs text-slate-600">
-            <span className="font-semibold">填充规则：</span>优先从候选集1填充；候选集1不足16台时，从候选集2补充；候选集1+2仍不足16台时，从候选集3补充；若三个候选集合计仍不足16台，有多少展示多少。
-          </p>
-        </div>
-      </CollapsibleSection>
-
-      {/* 二、候选集1：画像匹配 */}
-      <CollapsibleSection title="二、候选集 1：画像匹配（买家主打偏好）" defaultOpen={true}>
-        <div className="flex items-center gap-2 mb-3">
-          <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded">优先级最高</span>
-          <span className="inline-block px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-semibold rounded">基于买家画像</span>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-2">1、匹配逻辑</h3>
-        <p className="text-slate-700 mb-2">
-          从买家画像中提取 <span className="font-semibold">出价偏好标签</span>（国别、品牌车系、车龄、价格段），强匹配当前在拍车辆。
-        </p>
-        <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-          <li>匹配维度：买家主打 <span className="font-semibold text-blue-700">车系 + 价位段 + 车龄段</span></li>
-          <li>匹配范围：当前平台所有 <span className="font-semibold">在拍状态</span> 的车辆</li>
-          <li>排序规则：匹配度由高到低排列</li>
+      {/* 1、数据筛选和过滤 */}
+      <CollapsibleSection title="1、数据筛选和过滤" defaultOpen={true}>
+        <ul className="list-disc list-inside space-y-2 text-slate-700">
+          <li>车辆状态：预展中、拍卖中</li>
+          <li>过滤车况评级D和火烧车、泡水车(含"水泡"标签)</li>
+          <li>过滤已登录账号已出价车辆</li>
         </ul>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2、匹配优先级</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-blue-50">
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">优先级</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">匹配条件</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">说明</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-5 h-5 bg-blue-600 text-white text-xs rounded-full text-center leading-5">1</span></td>
-                <td className="border border-slate-200 px-3 py-2">车系 + 价位段 + 车龄段 全匹配</td>
-                <td className="border border-slate-200 px-3 py-2 text-slate-500">三维度完全命中，推荐权重最高</td>
-              </tr>
-              <tr className="bg-slate-50">
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-5 h-5 bg-blue-500 text-white text-xs rounded-full text-center leading-5">2</span></td>
-                <td className="border border-slate-200 px-3 py-2">车系 + 价位段 匹配</td>
-                <td className="border border-slate-200 px-3 py-2 text-slate-500">两维度命中</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-5 h-5 bg-blue-400 text-white text-xs rounded-full text-center leading-5">3</span></td>
-                <td className="border border-slate-200 px-3 py-2">车系匹配</td>
-                <td className="border border-slate-200 px-3 py-2 text-slate-500">仅车系命中</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">3、推荐标注</h3>
-        <p className="text-slate-700 mb-2">
-          候选集1命中的车辆，在推荐逻辑列标注为：
-        </p>
-        <div className="flex gap-2 flex-wrap">
-          <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">画像匹配-主打车型</span>
-          <span className="inline-block px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded">候选集 1</span>
-        </div>
       </CollapsibleSection>
 
-      {/* 三、候选集2：平台周转 */}
-      <CollapsibleSection title="三、候选集 2：平台周转（高周转车型）" defaultOpen={true}>
+      {/* 2、推荐数据 */}
+      <CollapsibleSection title="2、推荐数据" defaultOpen={true}>
+
+        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-3">
+          2.1、前端展示全平台上拍车辆的15%：（按照每日上架不足200台，为您推荐<span className="text-red-600 underline decoration-red-400">固定展示16台车，可配</span>）
+        </h3>
+
+        <h3 className="text-base font-semibold text-slate-800 mt-6 mb-3">2.2、候选集</h3>
+
+        {/* 候选集1 */}
+        <div className="ml-2 mb-6">
+          <h4 className="text-sm font-semibold text-slate-800 mb-3">● 候选集 1</h4>
+
+          {/* Step 1 */}
+          <div className="mb-4">
+            <h5 className="text-sm font-semibold text-slate-800 mb-2">Step 1 — 强匹配（优先）</h5>
+            <ul className="list-disc list-inside space-y-2 text-slate-700">
+              <li>匹配维度：主打车系 + 主打价格段 + 主打车龄（三维全匹配）
+                <br />
+                <span className="ml-6 text-slate-600">例如买家标签为"大众迈腾 + 3-5万 + 4-6年"，则严格拉取该交集下的车源。若满16台则停止向下寻找。</span>
+              </li>
+              <li>若结果 ≥ 目标数量 → 直接使用，反之进入Step 2</li>
+            </ul>
+          </div>
+
+          {/* Step 2 */}
+          <div className="mb-4">
+            <h5 className="text-sm font-semibold text-slate-800 mb-2">Step 2 — 双维容差匹配（解决临界值流失）</h5>
+            <ul className="list-disc list-inside space-y-2 text-slate-700">
+              <li>匹配条件：【主打车系】+【价位容差：金额±10%】+【车龄容差：±1年】。</li>
+              <li>动作：将符合该条件的车辆补充进列表（需排除第1层级已有的车，按vid去重）。</li>
+            </ul>
+          </div>
+        </div>
+
+      </CollapsibleSection>
+
+      {/* 候选集2、3、打散等后续章节保持 */}
+      <CollapsibleSection title="2.2（续）、候选集 2：平台周转（高周转车型）" defaultOpen={true}>
         <div className="flex items-center gap-2 mb-3">
           <span className="inline-block px-2 py-0.5 bg-green-100 text-green-700 text-xs font-semibold rounded">优先级第二</span>
           <span className="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">基于周转分</span>
         </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-2">1、选取规则</h3>
-        <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
+        <ul className="list-disc list-inside space-y-2 text-slate-700 mb-3">
           <li>从全站车型中，按 <span className="font-semibold text-green-700">综合周转分</span> 从高到低排序</li>
           <li>取 <span className="font-semibold">TOP 50</span> 车型对应的在拍车辆</li>
           <li>同一车系在候选集2中的占比 <span className="font-semibold text-red-600">≤ 50%</span></li>
+          <li>去重：候选集2中的车辆如果已在候选集1中出现，则自动去重，不重复推荐</li>
         </ul>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2、周转分参考</h3>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
-          <p className="text-sm text-green-800">
-            <span className="font-semibold">周转分 = 成交率评分 × 0.7 + 耗时评分 × 0.3</span>
-          </p>
-          <p className="text-xs text-green-600 mt-1">
-            详见「概要 → 数据基础 → 车辆周转分计算」章节
-          </p>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">3、去重规则</h3>
-        <p className="text-slate-700 mb-2">
-          候选集2中的车辆如果已在候选集1中出现，则 <span className="font-semibold">自动去重</span>，不重复推荐。
-        </p>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">4、推荐标注</h3>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap mt-3">
+          <span className="text-xs text-slate-500">推荐标注：</span>
           <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">候选车源-同车型高频成交</span>
           <span className="inline-block px-2 py-1 bg-green-50 text-green-600 text-xs rounded">候选集 2</span>
         </div>
       </CollapsibleSection>
 
-      {/* 四、候选集3：全站兜底 */}
-      <CollapsibleSection title="四、候选集 3：全站兜底（平台热销）" defaultOpen={true}>
+      <CollapsibleSection title="2.2（续）、候选集 3：全站兜底（平台热销）" defaultOpen={true}>
         <div className="flex items-center gap-2 mb-3">
           <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded">优先级第三</span>
           <span className="inline-block px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-semibold rounded">兜底策略</span>
         </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-2">1、触发条件</h3>
         <p className="text-slate-700 mb-3">
           当候选集1 + 候选集2的车辆数不足16台时，启用候选集3进行补充。
         </p>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2、排序规则</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-slate-100">
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">排序优先级</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">字段</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">排序方向</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">说明</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-5 h-5 bg-slate-600 text-white text-xs rounded-full text-center leading-5">1</span></td>
-                <td className="border border-slate-200 px-3 py-2 font-semibold">结束时间</td>
-                <td className="border border-slate-200 px-3 py-2">升序 ↑</td>
-                <td className="border border-slate-200 px-3 py-2 text-slate-500">即将结束的优先展示</td>
-              </tr>
-              <tr className="bg-slate-50">
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-5 h-5 bg-slate-500 text-white text-xs rounded-full text-center leading-5">2</span></td>
-                <td className="border border-slate-200 px-3 py-2 font-semibold">出价次数</td>
-                <td className="border border-slate-200 px-3 py-2">降序 ↓</td>
-                <td className="border border-slate-200 px-3 py-2 text-slate-500">热度高的优先展示</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">3、去重规则</h3>
-        <p className="text-slate-700 mb-2">
-          候选集3中的车辆如果已在候选集1或候选集2中出现，则自动去重。
-        </p>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">4、推荐标注</h3>
-        <div className="flex gap-2 flex-wrap">
+        <p className="text-slate-700 mb-2 font-semibold">排序规则：按【结束时间(升序) + 出价次数(降序)】排序</p>
+        <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
+          <li>即将结束的优先展示</li>
+          <li>热度高的优先展示</li>
+          <li>去重：排除已在候选集1或候选集2中出现的车辆</li>
+        </ul>
+        <div className="flex gap-2 flex-wrap mt-3">
+          <span className="text-xs text-slate-500">推荐标注：</span>
           <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded">兜底-平台热销</span>
           <span className="inline-block px-2 py-1 bg-gray-50 text-gray-500 text-xs rounded">候选集 3</span>
         </div>
       </CollapsibleSection>
 
-      {/* 五、打散策略 */}
-      <CollapsibleSection title="五、打散策略" defaultOpen={true}>
+      {/* 3、打散策略 */}
+      <CollapsibleSection title="3、打散策略" defaultOpen={true}>
         <p className="text-slate-700 mb-3">
-          为避免推荐列表中同品牌/车型过于集中，影响用户体验，对最终推荐列表执行打散处理。
+          前 10 位中：
         </p>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-2">1、打散规则</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-amber-50">
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">规则</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">作用范围</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">限制条件</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-slate-200 px-3 py-2 font-semibold">品牌打散</td>
-                <td className="border border-slate-200 px-3 py-2">前 10 位</td>
-                <td className="border border-slate-200 px-3 py-2">同一品牌连续出现 <span className="font-semibold text-red-600">≤ 3 台</span></td>
-              </tr>
-              <tr className="bg-slate-50">
-                <td className="border border-slate-200 px-3 py-2 font-semibold">车型打散</td>
-                <td className="border border-slate-200 px-3 py-2">前 10 位</td>
-                <td className="border border-slate-200 px-3 py-2">同一车型连续出现 <span className="font-semibold text-red-600">≤ 2 台</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2、打散执行逻辑</h3>
-        <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-          <li>在三个候选集合并、去重、排序完成后执行</li>
-          <li>检测前10位中是否存在违反规则的连续排列</li>
-          <li>若违反，将多余车辆后移至下一个不违反规则的位置</li>
-          <li>打散后不改变候选集归属标注</li>
+        <ul className="list-disc list-inside space-y-2 text-slate-700 mb-3">
+          <li>同一品牌连续 <span className="font-semibold text-red-600">≤ 3 台</span></li>
+          <li>同一车型连续 <span className="font-semibold text-red-600">≤ 2 台</span></li>
         </ul>
-
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-3">
-          <p className="text-xs text-amber-700">
-            <span className="font-semibold">💡 示例：</span>若前10位中出现"宝马3系、宝马5系、宝马X3、宝马X5"连续4台宝马，则将第4台（宝马X5）后移，插入其他品牌车辆。
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mt-3">
+          <p className="text-xs text-slate-600">
+            在三个候选集合并、去重、排序完成后执行打散。若违反规则，将多余车辆后移至下一个不违反规则的位置，打散后不改变候选集归属标注。
           </p>
-        </div>
-      </CollapsibleSection>
-
-      {/* 六、推荐列表更新与补充 */}
-      <CollapsibleSection title="六、推荐列表更新与补充" defaultOpen={false}>
-        <h3 className="text-base font-semibold text-slate-800 mt-2 mb-2">1、实时更新</h3>
-        <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-          <li>推荐列表中的互动数据（浏览次数、出价次数）实时更新</li>
-          <li>拍卖倒计时实时刷新</li>
-        </ul>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">2、失效车辆处理</h3>
-        <ul className="list-disc list-inside space-y-1 text-slate-700 mb-3">
-          <li>车辆下架或竞价结束后，点击卡片提示"该车辆已下架/竞价已结束，请刷新页面"</li>
-          <li>刷新后系统自动补充新的推荐车辆，保持列表数量</li>
-        </ul>
-
-        <h3 className="text-base font-semibold text-slate-800 mt-4 mb-2">3、画像更新频率</h3>
-        <p className="text-slate-700 mb-2">
-          系统每日 0 点更新买家画像数据，推荐列表随之更新。
-        </p>
-      </CollapsibleSection>
-
-      {/* 七、候选集汇总 */}
-      <CollapsibleSection title="七、候选集汇总对照" defaultOpen={false}>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-slate-100">
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">候选集</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">数据来源</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">排序依据</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">推荐标注</th>
-                <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">标签颜色</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-slate-200 px-3 py-2 font-semibold">候选集 1</td>
-                <td className="border border-slate-200 px-3 py-2">买家画像偏好</td>
-                <td className="border border-slate-200 px-3 py-2">匹配度高→低</td>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block px-1.5 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">画像匹配-主打车型</span></td>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-3 h-3 bg-blue-500 rounded-full"></span> 蓝色</td>
-              </tr>
-              <tr className="bg-slate-50">
-                <td className="border border-slate-200 px-3 py-2 font-semibold">候选集 2</td>
-                <td className="border border-slate-200 px-3 py-2">全站周转分 TOP50</td>
-                <td className="border border-slate-200 px-3 py-2">周转分高→低</td>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block px-1.5 py-0.5 bg-green-100 text-green-700 text-xs rounded">候选车源-同车型高频成交</span></td>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span> 绿色</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-200 px-3 py-2 font-semibold">候选集 3</td>
-                <td className="border border-slate-200 px-3 py-2">全站在拍车辆</td>
-                <td className="border border-slate-200 px-3 py-2">结束时间↑ + 出价次数↓</td>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block px-1.5 py-0.5 bg-gray-100 text-gray-700 text-xs rounded">兜底-平台热销</span></td>
-                <td className="border border-slate-200 px-3 py-2"><span className="inline-block w-3 h-3 bg-gray-500 rounded-full"></span> 灰色</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </CollapsibleSection>
 
@@ -481,18 +299,181 @@ export const RecommendStrategy = () => (
 );
 
 // 埋点
-export const TrackingDocs = () => (
-  <DocPage
-    title="埋点"
-    icon={<BarChart3 className="text-blue-600" size={28} />}
-    subtitle="埋点事件与数据采集说明"
-  >
-    <div className="text-slate-500 text-center py-12">
-      <BarChart3 size={48} className="mx-auto mb-4 opacity-50" />
-      <p>内容待补充，请提供截图</p>
-    </div>
-  </DocPage>
-);
+export const TrackingDocs = () => {
+  const trackingEvents = [
+    {
+      name: 'rec_show_m',
+      trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。',
+      fields: 'rec_version(推荐算法版本), rec_source(首页、搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)',
+      platform: '移动端'
+    },
+    {
+      name: 'rec_show_pc',
+      trigger: 'PC端曝光次数：搜索结果页页底展示',
+      fields: 'rec_version(推荐算法版本), rec_source(搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)',
+      platform: 'PC端'
+    },
+    {
+      name: 'rec_click_m',
+      trigger: 'Mob点击次数：用户点击推荐卡片',
+      fields: 'rec_version(推荐算法版本), rec_source(首页、搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: '移动端'
+    },
+    {
+      name: 'rec_click_pc',
+      trigger: 'PC端点击次数：用户点击推荐卡片',
+      fields: 'rec_version(推荐算法版本), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: 'PC端'
+    },
+    {
+      name: 'aucdetail_view_pc',
+      trigger: 'PC端详情页：进入车辆详情页',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: 'PC端'
+    },
+    {
+      name: 'aucdetail_view_m',
+      trigger: '移动端详情页：进入车辆详情页',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: '移动端'
+    },
+    {
+      name: 'bid_start_m',
+      trigger: '移动端点击出价次数：点击"我要出价"按钮',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: '移动端'
+    },
+    {
+      name: 'bid_start_pc',
+      trigger: 'PC端点击出价次数：点击"我要出价"按钮',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: 'PC端'
+    },
+    {
+      name: 'bid_submit_m',
+      trigger: '移动端出价成功（同台车仅计算1次）：出价成功',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: '移动端'
+    },
+    {
+      name: 'bid_submit_pc',
+      trigger: 'PC端出价成功（同台车仅计算1次）：出价成功',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: 'PC端'
+    },
+    {
+      name: 'bid_success_m',
+      trigger: '移动端车辆中标：车辆中标',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: '移动端'
+    },
+    {
+      name: 'bid_success_pc',
+      trigger: 'PC端车辆中标：车辆中标',
+      fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)',
+      platform: 'PC端'
+    }
+  ];
+
+  return (
+    <DocPage
+      title="埋点"
+      icon={<BarChart3 className="text-blue-600" size={28} />}
+      subtitle="埋点事件与数据采集说明"
+    >
+      <div className="space-y-6">
+        {/* 一、埋点文档 */}
+        <CollapsibleSection title="一、埋点文档" defaultOpen={true}>
+          <div className="space-y-3">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+              <p className="text-slate-700 text-sm mb-2">技术看下有什么方式进行埋点：</p>
+              <a
+                href="https://doc.weixin.qq.com/sheet/e3_AUEAhwa7AKcCNkvFjEA9WQrSBTH0y?scode=AG4AJAc6AAgreGuAYwAUEAhwa7AKc&tab=BB08J2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 text-sm underline break-all"
+              >
+                【企微文档】推荐位埋点
+              </a>
+            </div>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-red-700 font-semibold text-sm">
+                1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键
+              </p>
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* 二、补充基准线 */}
+        <CollapsibleSection title="二、补充基准线" defaultOpen={true}>
+          <div className="space-y-3">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-blue-800 text-sm">
+                功能开发后，前端先发版，统计现有为您推荐数据（移动端）
+              </p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border-collapse border border-slate-200">
+                <tbody>
+                  <tr className="border-b border-slate-200">
+                    <td className="py-3 px-4 bg-slate-50 font-semibold text-slate-700 w-32 border-r border-slate-200">指标名称</td>
+                    <td className="py-3 px-4 text-slate-800">出价率 (Bid Rate)</td>
+                  </tr>
+                  <tr className="border-b border-slate-200">
+                    <td className="py-3 px-4 bg-slate-50 font-semibold text-slate-700 border-r border-slate-200">统计口径</td>
+                    <td className="py-3 px-4 text-slate-800">出价台次 / 曝光台次，以移动端推荐模块为统计范围（一期）</td>
+                  </tr>
+                  <tr className="border-b border-slate-200">
+                    <td className="py-3 px-4 bg-slate-50 font-semibold text-slate-700 border-r border-slate-200">当前基线值</td>
+                    <td className="py-3 px-4 text-slate-800">取上线前 21 天数据均值，精确到小数点后两位</td>
+                  </tr>
+                  <tr className="border-b border-slate-200">
+                    <td className="py-3 px-4 bg-slate-50 font-semibold text-slate-700 border-r border-slate-200">数据来源</td>
+                    <td className="py-3 px-4 text-slate-800">现有唯车拍 app &amp; 小程序移动端推荐位的曝光/出价事件</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-4 bg-slate-50 font-semibold text-slate-700 border-r border-slate-200">统计粒度</td>
+                    <td className="py-3 px-4 text-slate-800">以"台次"为单位，同一买家对同一车辆的多次出价仅计 1 次</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* 三、埋点事件清单 */}
+        <CollapsibleSection title="三、埋点事件清单" defaultOpen={true}>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse border border-slate-200">
+              <thead>
+                <tr className="bg-slate-100 text-left">
+                  <th className="py-2.5 px-3 font-semibold text-slate-700 border-b border-r border-slate-200 whitespace-nowrap">事件名称</th>
+                  <th className="py-2.5 px-3 font-semibold text-slate-700 border-b border-r border-slate-200">触发时机</th>
+                  <th className="py-2.5 px-3 font-semibold text-slate-700 border-b border-r border-slate-200">属性字段</th>
+                  <th className="py-2.5 px-3 font-semibold text-slate-700 border-b border-slate-200 whitespace-nowrap">端</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trackingEvents.map((evt, idx) => (
+                  <tr key={evt.name} className={idx < trackingEvents.length - 1 ? 'border-b border-slate-200' : ''}>
+                    <td className="py-2.5 px-3 text-slate-800 font-mono text-xs border-r border-slate-200 whitespace-nowrap">{evt.name}</td>
+                    <td className="py-2.5 px-3 text-slate-600 border-r border-slate-200 text-xs">{evt.trigger}</td>
+                    <td className="py-2.5 px-3 text-slate-600 border-r border-slate-200 text-xs">{evt.fields}</td>
+                    <td className="py-2.5 px-3 whitespace-nowrap">
+                      <span className={`px-2 py-0.5 rounded text-xs ${evt.platform === '移动端' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                        {evt.platform}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CollapsibleSection>
+      </div>
+    </DocPage>
+  );
+};
 
 // 可配置参数
 export const ConfigParams = () => (
