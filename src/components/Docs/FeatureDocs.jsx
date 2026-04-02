@@ -670,9 +670,128 @@ export const ReleaseStrategy = () => (
     icon={<Rocket className="text-blue-600" size={28} />}
     subtitle="版本发布与上线策略"
   >
-    <div className="text-slate-500 text-center py-12">
-      <Rocket size={48} className="mx-auto mb-4 opacity-50" />
-      <p>内容待补充，请提供截图</p>
+    <div className="prose prose-slate max-w-none text-sm leading-relaxed">
+
+      {/* 阶段一 */}
+      <CollapsibleSection title="阶段一：内部验证" defaultOpen={true}>
+        <p className="text-slate-700 mb-2">
+          仅上线 BMS 后台验证功能，使用 2–3 周进行规则验证和微调。
+        </p>
+        <div className="overflow-x-auto mt-4">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="border border-slate-300 px-4 py-2 text-center font-semibold text-slate-800" colSpan={2}>阶段一：内部验证（2-3 周）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50 w-28">准入条件</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">推荐算法验证页（BMS）通过测试 + PM + 研发三方功能验收</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">测试范围</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">仅限 BMS 内部账号可见推荐数据，前端不对外展示</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">验证内容</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">①推荐列表数量是否达标 ②候选集来源标签是否正确 ③缓存降级是否正常触发</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">验收指标</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">连续 7 个工作日 BMS 验证无明显错误推荐（如已成交车辆出现在推荐列表）</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">阶段一结束条件</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">三方确认验收通过，方可进入阶段二</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CollapsibleSection>
+
+      {/* 阶段二 */}
+      <CollapsibleSection title="阶段二：正式上线" defaultOpen={true}>
+        <p className="text-slate-700 mb-2">
+          全端发布「为您推荐」模块。
+        </p>
+        <div className="overflow-x-auto mt-4">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="border border-slate-300 px-4 py-2 text-center font-semibold text-slate-800" colSpan={2}>阶段二：正式上线与监控</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50 w-28">上线方式</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">全量发布（一期不做灰度，因推荐模块为新增功能不影响现有流程）</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">上线时间窗口</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">选择周二至周四工作日下午 19:00-20:00，避开周末与流量高峰</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">核心监控指标</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">CTR（目标≥基线）、推荐接口 P99 响应时间（告警阈值：&gt;500ms）、接口错误率（告警阈值：&gt;1%）</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-4 py-2 font-medium text-slate-700 bg-slate-50">上线后观察期</td>
+                <td className="border border-slate-300 px-4 py-2 text-slate-700">上线后 72 小时内每 4 小时看一次数据看板，测试 + 产品共同值守</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CollapsibleSection>
+
+      {/* 回滚方案 */}
+      <CollapsibleSection title="回滚方案" defaultOpen={true}>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-red-50">
+                <th className="border border-slate-300 px-3 py-2 text-left font-semibold text-slate-800 w-12">步骤</th>
+                <th className="border border-slate-300 px-3 py-2 text-left font-semibold text-slate-800 w-28">操作</th>
+                <th className="border border-slate-300 px-3 py-2 text-left font-semibold text-slate-800">执行内容</th>
+                <th className="border border-slate-300 px-3 py-2 text-left font-semibold text-slate-800 w-20">责任人</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-slate-300 px-3 py-2 text-center text-slate-700">1</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">触发回滚判断</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">接口错误率 &gt; 1% 持续 10 分钟 或 推荐列表为空率 &gt; 10% 或 PM 决策</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">研发</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="border border-slate-300 px-3 py-2 text-center text-slate-700">2</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">关闭推荐功能开关</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">BMS 功能开关页将"为您推荐"状态置为"关闭"（前端降级为原有为您推荐逻辑）</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">研发</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-3 py-2 text-center text-slate-700">3</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">确认前端降级</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">验证移动端"为您推荐"模块已显示"原有为您推荐逻辑"</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">前端研发</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="border border-slate-300 px-3 py-2 text-center text-slate-700">4</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">通知相关方</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">在项目群通知 PM，说明回滚原因与预计修复时间</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">研发</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-300 px-3 py-2 text-center text-slate-700">5</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">问题排查</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">查看推荐服务日志、Redis 缓存状态等状态</td>
+                <td className="border border-slate-300 px-3 py-2 text-slate-700">后端研发</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CollapsibleSection>
+
     </div>
   </DocPage>
 );
