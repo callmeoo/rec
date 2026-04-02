@@ -402,10 +402,10 @@ const SearchNoResultNew = ({ isLoggedIn, recommendations }) => (
             {/* 右侧信息 */}
             <div className="flex-1 p-2 flex flex-col justify-between min-w-0">
               <div>
-                <p className="text-[11px] text-red-500 flex items-center gap-0.5">
-                  <MapPin size={10} /> {car.location}
-                </p>
-                <h4 className="text-xs font-semibold text-gray-900 leading-snug line-clamp-2 mt-0.5">{car.name}</h4>
+                <h4 className="text-xs font-semibold text-gray-900 leading-snug line-clamp-1 flex items-center gap-1">
+                  <span className="text-red-500 flex items-center gap-0.5 flex-shrink-0"><MapPin size={10} />{car.location}</span>
+                  <span className="truncate">{car.name}</span>
+                </h4>
                 <p className="text-[10px] text-gray-400 mt-0.5 truncate">
                   {car.year}-01 | {(car.mileage / 10000).toFixed(2)}万公里
                 </p>
