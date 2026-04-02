@@ -109,12 +109,20 @@ export const FeatureOverview = () => {
               <div className="flex-shrink-0" style={{ width: '30%' }}>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <p className="text-xs text-amber-700 mb-2 font-semibold">📌 参考截图</p>
-                  <img 
-                    src={new URL('/buyer-profile-screenshot.png', import.meta.url).href}
-                    alt="买家画像需求截图" 
-                    className="w-full rounded border border-slate-200"
-                    onError={(e) => { e.target.style.display = 'none'; }}
-                  />
+                  <div className="relative">
+                    <img 
+                      src={new URL('/buyer-profile-screenshot.png', import.meta.url).href}
+                      alt="买家画像需求截图" 
+                      className="w-full rounded border border-slate-200"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                    {/* 生成月份黄色遮罩层 */}
+                    <div className="absolute top-0 right-0 w-3/5 bg-yellow-300/60 border-2 border-yellow-500 rounded px-1.5 py-1 flex items-center gap-1" style={{ top: '2%', right: '2%' }}>
+                      <span className="text-xs text-yellow-800 font-semibold whitespace-nowrap">调整年月日格式</span>
+                      <span className="text-xs text-slate-700">生成日期</span>
+                      <span className="text-xs text-slate-600 bg-white border border-slate-300 rounded px-1">2025年12月01日</span>
+                    </div>
+                  </div>
                   <p className="text-xs text-amber-600 mt-2">黄色遮罩层为新增功能点或已有功能调整点</p>
                 </div>
               </div>
@@ -127,6 +135,7 @@ export const FeatureOverview = () => {
                   <li>（1）、新增标签：国别（按占比排序）、出价次数（1台车出价N次计为N）、出价台次</li>
                   <li>（2）、价格段调整：0-3万、3-5万、5-8万、8-15万、15-20万、20万以上；系统按新的价格段重跑一遍已有画像数据</li>
                   <li>（3）、新增"出价偏好"：集中度标签由系统自动根据选定属性值（国别、品牌车系、车龄、价格段）占比，选出占比由高到低累加，直到覆盖 60–80% 的出价量，组成长期出价偏好标签</li>
+                  <li>（4）、生成月份：时间格式调整为"年月日"格式（如：2025年12月01日）</li>
                 </ul>
               </div>
             </div>
@@ -517,20 +526,20 @@ export const RecommendStrategy = () => (
 // 埋点
 export const TrackingDocs = () => {
   const mobileEvents = [
-    { name: 'rec_show_m', trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。', fields: 'rec_version(推荐算法版本), rec_source(首页、搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: '移动端' },
-    { name: 'rec_click_m', trigger: 'Mob点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页、搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'rec_show_m', trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: '移动端' },
+    { name: 'rec_click_m', trigger: 'Mob点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
+    { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
   ];
   const pcEvents = [
-    { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
-    { name: 'rec_click_pc', trigger: 'PC端点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'aucdetail_view_pc', trigger: 'PC端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'bid_start_pc', trigger: 'PC端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'bid_submit_pc', trigger: 'PC端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'bid_success_pc', trigger: 'PC端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
+    { name: 'rec_click_pc', trigger: 'PC端点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'aucdetail_view_pc', trigger: 'PC端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_start_pc', trigger: 'PC端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_submit_pc', trigger: 'PC端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_success_pc', trigger: 'PC端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
   ];
 
   return (
