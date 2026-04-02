@@ -105,6 +105,59 @@ const BottomTabBar = () => (
   </div>
 );
 
+/* ─── 现有样式手机页面（无引导条、无个性化标签） ─── */
+const MobilePhoneFrameOld = ({ recommendations, loading }) => (
+  <div className="w-[375px] h-[812px] bg-gray-50 rounded-[2.5rem] shadow-2xl border border-gray-200 overflow-hidden flex flex-col relative">
+    {/* 状态栏 */}
+    <div className="h-11 bg-white flex items-end justify-between px-6 pb-1">
+      <span className="text-xs font-semibold text-gray-900">9:41</span>
+      <div className="flex items-center gap-1">
+        <div className="w-4 h-2.5 border border-gray-900 rounded-sm relative">
+          <div className="absolute inset-0.5 bg-gray-900 rounded-[1px]" />
+        </div>
+      </div>
+    </div>
+
+    {/* 可滚动内容 */}
+    <div className="flex-1 overflow-y-auto">
+      {/* 首页上半部分 */}
+      <MobileHomePage />
+
+      {/* 猜你喜欢标题（现有样式） */}
+      <div className="flex items-center justify-center py-3">
+        <span className="text-base font-bold text-gray-900">猜你喜欢</span>
+      </div>
+
+      {/* 车辆列表（无个性化，简单双列） */}
+      <div className="px-3 pb-4">
+        {loading ? (
+          <div className="grid grid-cols-2 gap-2.5">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white rounded-lg h-56 animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2.5">
+            {recommendations.map((car) => (
+              <MobileCarCard
+                key={car.id}
+                car={car}
+                onLike={() => {}}
+                onView={() => {}}
+                onVehicleClick={null}
+                isLiked={false}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* 底部 Tab */}
+    <BottomTabBar />
+  </div>
+);
+
 /* ─── 单列完整手机页面（首页上半 + 为您推荐下半） ─── */
 const MobilePhoneFrame = ({ isLoggedIn, recommendations, loading, onLike, onView, onVehicleClick, likedCars }) => (
   <div className="w-[375px] h-[812px] bg-gray-50 rounded-[2.5rem] shadow-2xl border border-gray-200 overflow-hidden flex flex-col relative">
@@ -363,14 +416,20 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
       {/* 标题 */}
       <div className="text-center pt-6 pb-2">
         <h1 className="text-xl font-bold text-gray-900">为您推荐（移动端）</h1>
-        <p className="text-sm text-gray-500 mt-1">左侧为登录前（含引导条），右侧为登录后</p>
+        <p className="text-sm text-gray-500 mt-1">现有样式 → 登录前（含引导条） → 登录后</p>
       </div>
 
-      {/* 两列手机预览 */}
+      {/* 三列手机预览 */}
       <div className="flex items-start justify-center gap-8 px-6 py-6">
-        {/* 左列：未登录 */}
+        {/* 左列：现有样式 */}
         <div className="flex flex-col items-center gap-3">
-          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">登录前</span>
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">现有样式</span>
+          <MobilePhoneFrameOld recommendations={recommendations} loading={loading} />
+        </div>
+
+        {/* 中列：未登录 */}
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">新样式-登录前</span>
           <MobilePhoneFrame
             isLoggedIn={false}
             recommendations={recommendations}
@@ -384,7 +443,7 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
 
         {/* 右列：已登录 */}
         <div className="flex flex-col items-center gap-3">
-          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">登录后</span>
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">新样式-登录后</span>
           <MobilePhoneFrame
             isLoggedIn={true}
             recommendations={recommendations}
