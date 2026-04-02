@@ -86,7 +86,109 @@ const RecommendationPage = ({ onVehicleClick }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-50">
+    <div className="h-full flex flex-col bg-slate-50 overflow-y-auto">
+
+      {/* ═══ 现有样式 ═══ */}
+      <div className="border-b-4 border-slate-200">
+        <div className="text-center pt-4 pb-2">
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">现有样式</span>
+        </div>
+
+        {/* 搜索条件栏 */}
+        <div className="bg-white border-b border-slate-200 px-6 py-2 flex items-center gap-3 text-sm">
+          <span className="text-slate-500">当前筛选：</span>
+          <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-700">搜索词：劳斯莱斯 <span className="text-slate-400 ml-1 cursor-pointer">×</span></span>
+          <span className="text-slate-400 cursor-pointer">重置条件</span>
+          <div className="ml-auto flex items-center gap-4 text-xs text-slate-500">
+            <span>竞价须知 &gt;</span>
+            <span>充值保证金 &gt;</span>
+          </div>
+        </div>
+
+        {/* Tab栏 */}
+        <div className="bg-white border-b border-slate-200 px-6 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <span className="text-red-600 font-semibold border-b-2 border-red-600 pb-1">全部竞价车辆</span>
+            <span className="text-slate-500">未出价车辆</span>
+            <span className="text-slate-500">已出价车辆</span>
+          </div>
+          <div className="flex items-center gap-4 text-xs text-slate-500">
+            <span className="text-red-500">默认排序 ▾</span>
+            <span>上牌时间 ▾</span>
+            <span>竞价价格 ▾</span>
+          </div>
+        </div>
+
+        {/* 空状态 */}
+        <div className="bg-white flex flex-col items-center justify-center py-16">
+          <div className="w-32 h-32 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+            <span className="text-5xl text-slate-300">🔍</span>
+          </div>
+          <p className="text-sm text-slate-400">未找到搜索车辆</p>
+        </div>
+
+        {/* 为您推荐标题 */}
+        <div className="bg-white flex items-center justify-center py-4 gap-2">
+          <span className="text-red-400 text-lg">❝</span>
+          <span className="text-xl font-bold text-slate-900">为您推荐</span>
+          <span className="text-red-400 text-lg">❞</span>
+        </div>
+
+        {/* 现有样式推荐卡片 */}
+        <div className="bg-white px-6 pb-6">
+          {loading ? (
+            <div className="grid grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-slate-100 rounded-lg h-72 animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-4 gap-4">
+              {recommendations.slice(0, 4).map((car) => (
+                <div key={car.id} className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+                  <div className="relative aspect-[4/3] bg-gray-100">
+                    <img src={car.image} alt={car.name} className="w-full h-full object-cover" />
+                    <span className="absolute top-2 left-2 text-[10px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold">专业检测</span>
+                    {car.conditionScore && (
+                      <span className="absolute top-2 right-2 text-[10px] bg-slate-800/80 text-white px-1.5 py-0.5 rounded font-bold">
+                        {car.conditionScore}{car.conditionScore >= 90 ? 'A' : 'B'}
+                      </span>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-gradient-to-t from-black/60 px-2 py-1">
+                      <span className="text-[10px] text-orange-400 font-semibold">竞价中</span>
+                      <span className="text-[10px] text-white/80">{car.conditionScore}A</span>
+                    </div>
+                  </div>
+                  <div className="p-2.5">
+                    <p className="text-xs text-red-500 mb-0.5">📍{car.location}</p>
+                    <h4 className="text-xs font-semibold text-slate-900 line-clamp-2 leading-snug">{car.name}</h4>
+                    <p className="text-[10px] text-slate-400 mt-1 truncate">
+                      粤A | {car.year}-01 | {(car.mileage / 10000).toFixed(2)}万公里 | 0次过户
+                    </p>
+                    <div className="flex gap-1 mt-1.5">
+                      <span className="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-px rounded">竞价大厅</span>
+                      {car.price > 100000 && <span className="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-px rounded">上新</span>}
+                    </div>
+                    <div className="flex items-end justify-between mt-2">
+                      <div>
+                        <span className="text-sm font-bold text-red-600">¥{(car.price / 10000).toFixed(1)}</span>
+                        <span className="text-xs text-slate-500 ml-0.5">万起</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400">4月2日 15:00结束</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ═══ 新样式 ═══ */}
+      <div className="text-center pt-6 pb-2">
+        <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">新样式</span>
+      </div>
+
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
