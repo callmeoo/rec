@@ -129,11 +129,6 @@ const MobileHomePage = () => {
                 <p className="text-white/80 text-[10px]">报废车专场  政企专场</p>
               </div>
             </div>
-            <div className="mt-3 flex justify-center">
-              <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
-                <span className="text-3xl">🚗</span>
-              </div>
-            </div>
           </div>
 
           {/* 右上 - 比亚迪专场 */}
@@ -141,10 +136,6 @@ const MobileHomePage = () => {
             <div>
               <h4 className="font-bold text-sm text-gray-900">比亚迪专场</h4>
               <p className="text-[10px] text-gray-500 mt-0.5">厂家车源</p>
-            </div>
-            <div className="flex -space-x-2">
-              <div className="w-12 h-9 bg-white rounded-lg shadow-sm flex items-center justify-center text-lg">🚙</div>
-              <div className="w-12 h-9 bg-white rounded-lg shadow-sm flex items-center justify-center text-lg">🏎️</div>
             </div>
           </div>
 

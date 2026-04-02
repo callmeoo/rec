@@ -123,9 +123,14 @@ const MobilePhoneFrame = ({ isLoggedIn, recommendations, loading, onLike, onView
       {/* 首页上半部分 */}
       <MobileHomePage />
 
-      {/* 登录引导条（仅未登录时显示） */}
+      {/* 为您推荐标题 */}
+      <div className="flex items-center justify-center pt-3 pb-1">
+        <span className="text-base font-bold text-gray-900">为您推荐</span>
+      </div>
+
+      {/* 登录引导条（仅未登录时显示）— 放在"为您推荐"下方 */}
       {!isLoggedIn && (
-        <div className="mx-4 mt-3 mb-1 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl px-3 py-2.5">
+        <div className="mx-4 mb-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl px-3 py-2.5">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -142,11 +147,6 @@ const MobilePhoneFrame = ({ isLoggedIn, recommendations, loading, onLike, onView
           </div>
         </div>
       )}
-
-      {/* 为您推荐标题 */}
-      <div className="flex items-center justify-center py-3">
-        <span className="text-base font-bold text-gray-900">为您推荐</span>
-      </div>
 
       {/* 推荐车辆列表 */}
       <div className="px-3 pb-4">
