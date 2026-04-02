@@ -477,8 +477,112 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
     setUserPreferences((prev) => ({ ...prev, viewedCars: [...prev.viewedCars, carId] }));
   };
 
+  const [mobileTab, setMobileTab] = useState('展示规则');
+
   return (
     <div className="h-full bg-slate-100 overflow-y-auto">
+
+      {/* Tab 切换 */}
+      <div className="flex border-b border-slate-200 bg-white px-6">
+        {['展示规则', '示意样式'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setMobileTab(tab)}
+            className={`px-5 py-3 text-sm font-medium transition-colors relative ${
+              mobileTab === tab
+                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600'
+                : 'text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab1: 展示规则 */}
+      {mobileTab === '展示规则' && (
+        <div className="p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+              📋 前端展示要求与推荐位规则
+            </h2>
+            <div className="prose prose-slate max-w-none text-sm leading-relaxed">
+
+              <div className="border border-slate-200 rounded-lg mb-4 overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50"><span className="text-lg font-bold text-slate-900">1、模块位置与行为</span></div>
+                <div className="px-4 py-4">
+                  <ul className="list-disc list-inside space-y-1.5 text-slate-700">
+                    <li>页面位置：原有为您推荐模块。搜索无结果，新增"为您推荐"数据</li>
+                    <li>吸顶逻辑：非初始吸顶。当买家向上滑动页面，推荐模块到达顶部时，触发吸顶。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="border border-slate-200 rounded-lg mb-4 overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50"><span className="text-lg font-bold text-slate-900">2、卡片设计</span></div>
+                <div className="px-4 py-4">
+                  <ul className="list-disc list-inside space-y-1.5 text-slate-700">
+                    <li>卡片元素：基本样式同"全部车源列表页车辆卡片"，不同点如下</li>
+                    <li>标签区：</li>
+                  </ul>
+                  <p className="text-slate-700 mt-2 ml-4">仅展示促销标签类型，优先级：围观人数、多人意向、周转快；</p>
+                  <p className="text-slate-700 ml-4">如果促销标签都没有出现，则不展示；</p>
+                  <div className="ml-4 mt-2 space-y-1 text-slate-700">
+                    <p>促销标签1（热度）："x人围观" —— 车辆浏览人数*2。</p>
+                    <p>促销标签2（供需）："多人意向" —— 车辆对应出价人数 &gt; 3。</p>
+                    <p>促销标签3（周转）："周转快" —— 车系对应周转分 &gt; 70分。</p>
+                  </div>
+                  <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm text-blue-800">● 适配细节：使用列表预加载 或 异步加载，确保滑动过程无白块。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border border-slate-200 rounded-lg mb-4 overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50"><span className="text-lg font-bold text-slate-900">3、引导逻辑</span></div>
+                <div className="px-4 py-4">
+                  <p className="text-slate-700 mb-2">未登录状态下，插入"登录查看您的匹配车源"的引导。</p>
+                  <p className="text-slate-700 mb-2">点击引导条，跳转至登录页，登录成功后调整至 为您推荐</p>
+                </div>
+              </div>
+
+              <div className="border border-slate-200 rounded-lg mb-4 overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50"><span className="text-lg font-bold text-slate-900">4、拍卖结束/车辆下架</span></div>
+                <div className="px-4 py-4">
+                  <p className="text-slate-700 mb-2">当买家在浏览过程中，推荐流中的某台车被撤拍或竞价结束</p>
+                  <ul className="list-disc list-inside space-y-1.5 text-slate-700">
+                    <li>非浏览状态：列表刷新时，自动剔除。</li>
+                    <li>当前浏览状态：</li>
+                  </ul>
+                  <div className="ml-6 mt-2 space-y-1.5 text-slate-700">
+                    <p>● 点击处理：toast提示"车辆状态有更新"后，"局部移除/置灰"该失效卡片，并自动将下方卡片上移补位；</p>
+                    <p>或者在顶部出现"有新车源，点击刷新"的提示条，买家点击"刷新"系统执行刷新。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border border-slate-200 rounded-lg mb-4 overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50"><span className="text-lg font-bold text-slate-900">5、搜索无结果</span></div>
+                <div className="px-4 py-4">
+                  <ul className="list-disc list-inside space-y-1.5 text-slate-700">
+                    <li>移动端：当买家主动搜索后无结果，</li>
+                  </ul>
+                  <p className="text-slate-700 mt-1 ml-4">搜索结果页底部应自动衔接"为您推荐"模块；pc端已有此逻辑，数据用新数据覆盖。</p>
+                  <ul className="list-disc list-inside space-y-1.5 text-slate-700 mt-2">
+                    <li>文案引导：展示"未找到符合条件的车源，为您推荐以下车辆"。</li>
+                    <li>设计样式：以设计稿为准</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab2: 示意样式 */}
+      {mobileTab === '示意样式' && (
+        <div>
       {/* 标题 */}
       <div className="text-center pt-6 pb-2">
         <h1 className="text-xl font-bold text-gray-900">为您推荐（移动端）</h1>
@@ -548,6 +652,8 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
           <SearchNoResultNew isLoggedIn={true} recommendations={recommendations} />
         </div>
       </div>
+      </div>
+      )}
     </div>
   );
 };

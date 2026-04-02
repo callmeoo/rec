@@ -19,7 +19,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         {
             icon: TrendingUp,
             label: '客户端展示',
-            subItems: ['展示规则', 'PC端', '移动端']
+            subItems: ['移动端', 'PC端']
         },
         {
             icon: BarChart2,

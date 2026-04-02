@@ -22,7 +22,6 @@ function App() {
       {activeTab === '移动端' && (
         <MobileRecommendationPage onVehicleClick={setSelectedVehicleId} />
       )}
-      {activeTab === '展示规则' && <DisplayRules />}
       {activeTab === '推荐算法验证' && <BuyerRecommendationVerify />}
       {activeTab === '平台周转排行' && <TurnoverRanking onVehicleClick={setSelectedVehicleId} />}
       {activeTab === '推荐数据看板' && <DataDashboard />}
@@ -34,7 +33,6 @@ function App() {
       {activeTab === '发布策略' && <ReleaseStrategy />}
       {activeTab !== 'PC端' && 
        activeTab !== '移动端' && 
-       activeTab !== '展示规则' &&
        activeTab !== '推荐算法验证' && 
        activeTab !== '平台周转排行' && 
        activeTab !== '推荐数据看板' && 
