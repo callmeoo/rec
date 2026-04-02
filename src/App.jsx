@@ -29,7 +29,7 @@ function App() {
       {activeTab === '目标和数据基础' && <FeatureOverview />}
       {activeTab === '推荐策略' && <RecommendStrategy />}
       {activeTab === '埋点说明' && <TrackingDocs />}
-      {activeTab === '可配置参数' && <ConfigParams />}
+      {activeTab === '为您推荐配置' && <ConfigParams />}
       {activeTab === '发布策略' && <ReleaseStrategy />}
       {activeTab !== 'PC端' && 
        activeTab !== '移动端' && 
@@ -40,7 +40,7 @@ function App() {
        activeTab !== '目标和数据基础' &&
        activeTab !== '推荐策略' &&
        activeTab !== '埋点说明' &&
-       activeTab !== '可配置参数' &&
+       activeTab !== '为您推荐配置' &&
        activeTab !== '发布策略' &&
        activeTab !== '课程开发' && 
        activeTab !== '邀请成员' && 

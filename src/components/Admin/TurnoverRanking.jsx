@@ -6,7 +6,7 @@ const TurnoverRanking = ({ onVehicleClick }) => {
   const [expandedSeries, setExpandedSeries] = useState({});
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
 
   // 计算分页数据
   const totalPages = Math.ceil(rankings.length / pageSize);
@@ -18,11 +18,21 @@ const TurnoverRanking = ({ onVehicleClick }) => {
   const generateMockData = () => {
     const seriesNames = [
       '奔驰E级', '宝马5系', '奥迪A6', '丰田凯美瑞', '本田雅阁',
-      '大众帕萨特', '特斯拉Model 3', '比亚迪汉', '蔚来ET5', '理想L8'
+      '大众帕萨特', '特斯拉Model 3', '比亚迪汉', '蔚来ET5', '理想L8',
+      '奔驰C级', '宝马3系', '奥迪A4', '丰田RAV4', '本田CR-V',
+      '大众途观', '特斯拉Model Y', '比亚迪宋', '蔚来ES6', '理想L7',
+      '奔驰GLC', '宝马X3', '奥迪Q5', '丰田汉兰达', '本田皓影',
+      '大众迈腾', '小鹏P7', '比亚迪秦', '蔚来ET7', '理想ONE',
+      '奔驰A级', '宝马1系', '奥迪A3', '丰田卡罗拉', '本田思域',
+      '大众朗逸', '小鹏G6', '比亚迪海豚', '极氪001', '哪吒S',
+      '奔驰GLE', '宝马X5', '奥迪Q7', '丰田普拉多', '本田奥德赛',
+      '大众ID.4', '小鹏G9', '比亚迪唐', '极氪007', '零跑C11'
     ];
 
     return seriesNames.map((name, index) => {
-      const avgDealRate = Math.floor(Math.random() * 30) + 60; // 60-90%
+      const totalListings = Math.floor(Math.random() * 30) + 6;
+      const totalDeals = Math.floor(Math.random() * (totalListings - 3)) + 3;
+      const avgDealRate = ((totalDeals / totalListings) * 100).toFixed(1);
       const medianDealTime = Math.floor(Math.random() * 48) + 12; // 12-60小时
       const turnoverScore = avgDealRate * 0.7 + (100 - medianDealTime / 60 * 100) * 0.3;
 
@@ -39,7 +49,8 @@ const TurnoverRanking = ({ onVehicleClick }) => {
       return {
         seriesId: `S${index + 1}`,
         seriesName: name,
-        avgDealRate: avgDealRate.toFixed(1),
+        activeListings: totalListings,
+        avgDealRate: avgDealRate,
         medianDealTime: medianDealTime.toFixed(1),
         turnoverScore: turnoverScore.toFixed(1),
         models
@@ -182,6 +193,7 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase w-16">排名</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">车系名称</th>
+                    <th className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase">在拍量</th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase">平均成交率</th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase">成交耗时中位数</th>
                     <th className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase">综合周转分</th>
@@ -224,6 +236,11 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                           </button>
                         </td>
                         <td className="px-4 py-4 text-center">
+                          <span className="inline-block px-2 py-1 bg-slate-100 text-slate-700 rounded text-sm font-medium">
+                            {series.activeListings} 辆
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-center">
                           <div className="flex items-center justify-center gap-1">
                             <Percent size={14} className="text-slate-400" />
                             <span className="font-semibold">{series.avgDealRate}%</span>
@@ -253,7 +270,7 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                       {/* 车型行（展开时显示） */}
                       {expandedSeries[series.seriesId] && (
                         <tr>
-                          <td colSpan="6" className="bg-slate-50 p-0">
+                          <td colSpan="7" className="bg-slate-50 p-0">
                             <div className="px-12 py-4">
                               <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
                                 <div className="px-4 py-2 bg-slate-100 border-b border-slate-200">
@@ -292,13 +309,17 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                                           </span>
                                         </td>
                                         <td className="px-4 py-3 text-center">
-                                          <button
-                                            onClick={() => handleViewDetails(model.modelId)}
-                                            className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium"
-                                          >
-                                            查看详情
-                                            <ExternalLink size={12} />
-                                          </button>
+                                          {model.activeCount <= 1 ? (
+                                            <button
+                                              onClick={() => handleViewDetails(model.modelId)}
+                                              className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium"
+                                            >
+                                              查看详情
+                                              <ExternalLink size={12} />
+                                            </button>
+                                          ) : (
+                                            <span className="text-xs text-slate-400">-</span>
+                                          )}
                                         </td>
                                       </tr>
                                     ))}
@@ -319,8 +340,18 @@ const TurnoverRanking = ({ onVehicleClick }) => {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-                <div className="text-sm text-slate-600">
-                  共 {rankings.length} 条数据，每页 {pageSize} 条
+                <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <span>共 {rankings.length} 条，每页</span>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
+                    className="px-2 py-1 border border-slate-300 rounded text-sm"
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                  </select>
+                  <span>条</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button

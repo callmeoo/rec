@@ -14,7 +14,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         {
             icon: Info,
             label: '功能说明',
-            subItems: ['目标和数据基础', '推荐策略', '埋点说明', '可配置参数', '发布策略']
+            subItems: ['目标和数据基础', '推荐策略', '埋点说明', '发布策略']
         },
         {
             icon: TrendingUp,
@@ -24,7 +24,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         {
             icon: BarChart2,
             label: 'BMS推荐管理',
-            subItems: ['推荐算法验证', '平台周转排行', '推荐数据看板']
+            subItems: ['推荐算法验证', '平台周转排行', '推荐数据看板', '为您推荐配置']
         }
     ];
 
