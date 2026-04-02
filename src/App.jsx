@@ -8,20 +8,21 @@ import BuyerRecommendationVerify from './components/Admin/BuyerRecommendationVer
 import TurnoverRanking from './components/Admin/TurnoverRanking';
 import DataDashboard from './components/Admin/DataDashboard';
 import VersionHistory from './components/Docs/VersionHistory';
-import { FeatureOverview, RecommendStrategy, TrackingDocs, ConfigParams, ReleaseStrategy } from './components/Docs/FeatureDocs';
+import { FeatureOverview, RecommendStrategy, TrackingDocs, ConfigParams, ReleaseStrategy, DisplayRules } from './components/Docs/FeatureDocs';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('为您推荐（PC端）');
+  const [activeTab, setActiveTab] = useState('PC端');
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
 
   return (
     <DashboardLayout activeTab={activeTab} setActiveTab={setActiveTab}>
-      {activeTab === '为您推荐（PC端）' && (
+      {activeTab === 'PC端' && (
         <RecommendationPage onVehicleClick={setSelectedVehicleId} />
       )}
-      {activeTab === '为您推荐（移动端）' && (
+      {activeTab === '移动端' && (
         <MobileRecommendationPage onVehicleClick={setSelectedVehicleId} />
       )}
+      {activeTab === '展示规则' && <DisplayRules />}
       {activeTab === '推荐算法验证' && <BuyerRecommendationVerify />}
       {activeTab === '平台周转排行' && <TurnoverRanking onVehicleClick={setSelectedVehicleId} />}
       {activeTab === '推荐数据看板' && <DataDashboard />}
@@ -31,8 +32,9 @@ function App() {
       {activeTab === '埋点说明' && <TrackingDocs />}
       {activeTab === '可配置参数' && <ConfigParams />}
       {activeTab === '发布策略' && <ReleaseStrategy />}
-      {activeTab !== '为您推荐（PC端）' && 
-       activeTab !== '为您推荐（移动端）' && 
+      {activeTab !== 'PC端' && 
+       activeTab !== '移动端' && 
+       activeTab !== '展示规则' &&
        activeTab !== '推荐算法验证' && 
        activeTab !== '平台周转排行' && 
        activeTab !== '推荐数据看板' && 

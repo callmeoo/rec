@@ -18,8 +18,8 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         },
         {
             icon: TrendingUp,
-            label: '客户端',
-            subItems: ['为您推荐（PC端）', '为您推荐（移动端）']
+            label: '客户端展示',
+            subItems: ['展示规则', 'PC端', '移动端']
         },
         {
             icon: BarChart2,

@@ -138,7 +138,6 @@ const MobilePhoneFrame = ({ isLoggedIn, recommendations, loading, onLike, onView
               </div>
               <div className="min-w-0">
                 <p className="text-[11px] font-medium text-gray-900">登录后查看专属推荐</p>
-                <p className="text-[10px] text-gray-500 truncate">智能匹配更适合您的车源</p>
               </div>
             </div>
             <button className="px-3 py-1 bg-blue-600 text-white rounded-lg text-[11px] font-medium flex-shrink-0">
