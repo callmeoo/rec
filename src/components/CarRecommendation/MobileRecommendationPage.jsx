@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, TrendingUp, MapPin, Calendar, Gauge, Clock, FileCheck, Home, Grid3X3, Tent, UserCircle } from 'lucide-react';
+import { Heart, TrendingUp, MapPin, Calendar, Gauge, Clock, FileCheck, Home, Grid3X3, Tent, UserCircle, Search } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getRecommendations } from './recommendationEngine';
 import MobileHomePage from './MobileHomePage';
@@ -177,6 +177,141 @@ const MobilePhoneFrame = ({ isLoggedIn, recommendations, loading, onLike, onView
   </div>
 );
 
+/* ─── 搜索无结果底部Tab栏（全部车源高亮） ─── */
+const SearchBottomTabBar = () => (
+  <div className="flex items-center justify-around bg-white border-t border-gray-200 py-2 px-2">
+    <div className="flex flex-col items-center gap-0.5 text-gray-400">
+      <Home size={20} />
+      <span className="text-[10px]">首页</span>
+    </div>
+    <div className="flex flex-col items-center gap-0.5 text-red-600">
+      <Grid3X3 size={20} />
+      <span className="text-[10px] font-medium">全部车源</span>
+    </div>
+    <div className="flex flex-col items-center gap-0.5 text-gray-400">
+      <Tent size={20} />
+      <span className="text-[10px]">专场车源</span>
+    </div>
+    <div className="flex flex-col items-center gap-0.5 text-gray-400">
+      <UserCircle size={20} />
+      <span className="text-[10px]">个人中心</span>
+    </div>
+  </div>
+);
+
+/* ─── 搜索页顶部导航 ─── */
+const SearchHeader = () => (
+  <div className="bg-white">
+    {/* 顶部Tab */}
+    <div className="flex items-center px-4 pt-2 pb-1 gap-4">
+      <span className="text-lg font-black text-gray-900">全部<span className="text-red-500">▼</span></span>
+      <span className="text-sm text-gray-500">竞价大厅</span>
+      <span className="text-sm text-gray-500">有保留价</span>
+      <span className="ml-auto text-gray-400"><Search size={18} /></span>
+    </div>
+    {/* 筛选条 */}
+    <div className="flex items-center gap-4 px-4 py-2 border-b border-gray-100 text-xs text-gray-600">
+      <span>排序▾</span><span>品牌▾</span><span>车况▾</span><span>筛选▾</span>
+    </div>
+    {/* 已选条件 */}
+    <div className="flex items-center justify-between px-4 py-1.5 text-[11px]">
+      <span className="text-gray-600">车况评分:100 <span className="text-gray-400 ml-1">×</span></span>
+      <span className="text-gray-400">重置条件</span>
+    </div>
+  </div>
+);
+
+/* ─── 搜索无结果-现有样式 ─── */
+const SearchNoResultOld = () => (
+  <div className="w-[320px] h-[692px] bg-gray-50 rounded-[2.5rem] shadow-2xl border border-gray-200 overflow-hidden flex flex-col relative">
+    <div className="h-11 bg-white flex items-end justify-between px-6 pb-1">
+      <span className="text-xs font-semibold text-gray-900">9:41</span>
+      <div className="flex items-center gap-1">
+        <div className="w-4 h-2.5 border border-gray-900 rounded-sm relative">
+          <div className="absolute inset-0.5 bg-gray-900 rounded-[1px]" />
+        </div>
+      </div>
+    </div>
+    <div className="flex-1 overflow-y-auto">
+      <SearchHeader />
+      {/* 空状态 */}
+      <div className="flex flex-col items-center justify-center py-16 px-6">
+        <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+          <span className="text-6xl">🚗</span>
+        </div>
+        <p className="text-sm text-gray-400">没有找到您想要的车源</p>
+      </div>
+    </div>
+    <SearchBottomTabBar />
+  </div>
+);
+
+/* ─── 搜索无结果-新样式（带推荐列表） ─── */
+const SearchNoResultNew = ({ isLoggedIn, recommendations }) => (
+  <div className="w-[320px] h-[692px] bg-gray-50 rounded-[2.5rem] shadow-2xl border border-gray-200 overflow-hidden flex flex-col relative">
+    <div className="h-11 bg-white flex items-end justify-between px-6 pb-1">
+      <span className="text-xs font-semibold text-gray-900">9:41</span>
+      <div className="flex items-center gap-1">
+        <div className="w-4 h-2.5 border border-gray-900 rounded-sm relative">
+          <div className="absolute inset-0.5 bg-gray-900 rounded-[1px]" />
+        </div>
+      </div>
+    </div>
+    <div className="flex-1 overflow-y-auto">
+      <SearchHeader />
+      {/* 引导文案 */}
+      <div className="px-4 py-3">
+        <p className="text-sm text-blue-600 text-center">未找到符合条件的车源，为您推荐以下车辆</p>
+      </div>
+      {/* 推荐车辆列表（横向卡片） */}
+      <div className="px-3 pb-4 space-y-3">
+        {recommendations.slice(0, 3).map((car, idx) => (
+          <div key={car.id} className="bg-white rounded-lg overflow-hidden flex">
+            {/* 左侧图片 */}
+            <div className="w-28 h-24 flex-shrink-0 relative bg-gray-100">
+              <img src={car.image} alt={car.name} className="w-full h-full object-cover" />
+              {car.conditionScore && (
+                <div className="absolute top-1 left-1 bg-slate-800/80 text-white text-[9px] font-bold px-1 py-px rounded">
+                  {car.conditionScore}{car.conditionScore >= 90 ? 'A' : car.conditionScore >= 80 ? 'B' : 'C'}
+                </div>
+              )}
+              <div className="absolute bottom-1 left-1 flex items-center gap-1">
+                <span className="text-[8px] bg-orange-500 text-white px-1 rounded">竞价中</span>
+                <span className="text-[8px] text-white bg-black/50 px-1 rounded">00:56:52结束</span>
+              </div>
+            </div>
+            {/* 右侧信息 */}
+            <div className="flex-1 p-2 flex flex-col justify-between min-w-0">
+              <div>
+                <p className="text-[11px] text-red-500 flex items-center gap-0.5">
+                  <MapPin size={10} /> {car.location}
+                </p>
+                <h4 className="text-xs font-semibold text-gray-900 leading-snug line-clamp-2 mt-0.5">{car.name}</h4>
+                <p className="text-[10px] text-gray-400 mt-0.5 truncate">
+                  {car.year}-01 | {(car.mileage / 10000).toFixed(2)}万公里
+                </p>
+              </div>
+              <div>
+                {/* 促销标签 */}
+                <div className="flex gap-1 flex-wrap mb-1">
+                  {idx === 0 && <span className="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-px rounded font-medium">20人围观</span>}
+                  {idx < 2 && <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-px rounded font-medium">多人意向</span>}
+                  <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-px rounded font-medium">快速周转</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <span className="text-sm font-bold text-red-600">{(car.price / 10000).toFixed(1)}万起</span>
+                  <Heart size={14} className="text-gray-300" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <SearchBottomTabBar />
+  </div>
+);
+
 /* ─── 主组件：两列并排展示 ─── */
 const MobileRecommendationPage = ({ onVehicleClick }) => {
   const [recommendations, setRecommendations] = useState([]);
@@ -259,6 +394,33 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
             onVehicleClick={onVehicleClick}
             likedCars={userPreferences.likedCars}
           />
+        </div>
+      </div>
+      {/* 搜索无车源效果 */}
+      <div className="text-center pt-8 pb-2 border-t border-gray-200 mt-6 mx-6">
+        <h2 className="text-lg font-bold text-gray-900">搜索无车源</h2>
+        <p className="text-sm text-gray-500 mt-1">现有样式 vs 新样式对比</p>
+      </div>
+
+      <div className="flex items-start justify-center gap-6 px-6 py-6 flex-wrap">
+        {/* 现有样式 */}
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">现有样式</span>
+          <SearchNoResultOld />
+        </div>
+
+        {/* 新样式-登录前 */}
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">新样式-搜索无结果（登录前）</span>
+          <p className="text-xs text-gray-400 -mt-1">候选集2 + 候选集3</p>
+          <SearchNoResultNew isLoggedIn={false} recommendations={recommendations} />
+        </div>
+
+        {/* 新样式-登录后 */}
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">新样式-搜索无结果（登录后）</span>
+          <p className="text-xs text-gray-400 -mt-1">候选集1 + 候选集2 + 候选集3</p>
+          <SearchNoResultNew isLoggedIn={true} recommendations={recommendations} />
         </div>
       </div>
     </div>
