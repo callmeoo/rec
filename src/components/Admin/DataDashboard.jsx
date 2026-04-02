@@ -259,7 +259,6 @@ const DataDashboard = () => {
               </tfoot>
             </table>
           </div>
-          </div>
           )}
         </div>
 
