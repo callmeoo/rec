@@ -150,6 +150,7 @@ const BuyerRecommendationVerify = () => {
 
       return {
         position: i + 1,
+        auctionId: `AUC${String(Math.floor(Math.random() * 900000) + 100000)}`,
         brand: brands[Math.floor(Math.random() * brands.length)],
         series: series[Math.floor(Math.random() * series.length)],
         model: `2022款 豪华版`,
@@ -157,7 +158,7 @@ const BuyerRecommendationVerify = () => {
         location: locations[Math.floor(Math.random() * locations.length)],
         mileage: Math.floor(Math.random() * 100000) + 10000,
         age: Math.floor(Math.random() * 5) + 1,
-        conditionScore: Math.floor(Math.random() * 20) + 80,
+        conditionScore: Math.floor(Math.random() * 41) + 60,
         startPrice: Math.floor(Math.random() * 300000) + 100000,
         currentPrice: Math.floor(Math.random() * 350000) + 120000,
         endTime: endTime.toISOString(),
@@ -499,6 +500,7 @@ const BuyerRecommendationVerify = () => {
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">排序</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">推荐车源</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">AuctionID</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">基本参数</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">起拍价/状态</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">互动性</th>
@@ -528,6 +530,9 @@ const BuyerRecommendationVerify = () => {
                         </div>
                       </td>
                       <td className="px-4 py-4">
+                        <span className="text-xs font-mono text-slate-600">{item.auctionId}</span>
+                      </td>
+                      <td className="px-4 py-4">
                         <div className="space-y-1 text-sm">
                           <div className="flex items-center gap-1 text-slate-600">
                             <MapPin size={14} />
@@ -543,7 +548,7 @@ const BuyerRecommendationVerify = () => {
                           </div>
                           <div className="flex items-center gap-1 text-slate-600">
                             <Award size={14} />
-                            车况评分 {item.conditionScore}
+                            评分定级 {item.conditionScore}{item.conditionScore >= 90 ? 'A' : item.conditionScore >= 80 ? 'B' : item.conditionScore >= 70 ? 'C' : 'D'}
                           </div>
                         </div>
                       </td>

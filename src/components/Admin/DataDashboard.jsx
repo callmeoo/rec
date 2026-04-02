@@ -4,6 +4,7 @@ import { BarChart2, TrendingUp, Eye, MousePointer, ShoppingCart, Users, Calendar
 const DataDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('7'); // 7天、30天、90天
+  const [trendCollapsed, setTrendCollapsed] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);
 
   // 根据日期范围生成模拟数据
@@ -57,7 +58,8 @@ const DataDashboard = () => {
       candidateSetDistribution: [
         { name: '画像匹配', exposureCount: 4500, clickCount: 600, color: 'bg-blue-500' },
         { name: '平台周转', exposureCount: 3500, clickCount: 300, color: 'bg-green-500' },
-        { name: '全站兜底', exposureCount: 2000, clickCount: 100, color: 'bg-gray-500' }
+        { name: '全站兜底', exposureCount: 2000, clickCount: 100, color: 'bg-gray-500' },
+        { name: '初始默认', exposureCount: 1500, clickCount: 80, color: 'bg-purple-500' }
       ],
       positionPerformance: [
         { position: '1-3位', exposure: 38000, clicks: 3420, ctr: 9.0, bidRate: 15.2 },
@@ -179,10 +181,17 @@ const DataDashboard = () => {
           </div>
         </div>
 
-        {/* Trend Chart */}
-        <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">趋势分析</h3>
-          <div className="overflow-x-auto">
+        {/* Trend Chart - 可折叠 */}
+        <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
+          <button
+            onClick={() => setTrendCollapsed(!trendCollapsed)}
+            className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors"
+          >
+            <h3 className="text-lg font-semibold text-slate-900">趋势分析</h3>
+            <span className="text-slate-400 text-sm">{trendCollapsed ? '▶ 展开' : '▼ 收起'}</span>
+          </button>
+          {!trendCollapsed && (
+          <div className="px-6 pb-6">
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
@@ -250,6 +259,8 @@ const DataDashboard = () => {
               </tfoot>
             </table>
           </div>
+          </div>
+          )}
         </div>
 
         {/* Candidate Set Distribution */}
@@ -365,7 +376,7 @@ const DataDashboard = () => {
                 <li>画像匹配CTR = 600 / 4,500 = 13.33%（该策略召回车源的实际吸引力）</li>
               </ul>
               <p className="mt-2 text-slate-500">
-                <strong>数据来源：</strong>每个推荐车辆在埋点时会标记其候选集类型（candidateSet字段：1=画像匹配，2=平台周转，3=全站兜底），
+                <strong>数据来源：</strong>每个推荐车辆在埋点时会标记其候选集类型（candidateSet字段：1=画像匹配，2=平台周转，3=全站兜底，4=初始默认），
                 统计时按候选集类型分组计算各项指标。
               </p>
             </div>
@@ -409,26 +420,6 @@ const DataDashboard = () => {
           </div>
         </div>
 
-        {/* Umeng Integration Note */}
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <Calendar size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-blue-900 mb-2">友盟数据集成说明</h4>
-              <div className="space-y-2 text-xs text-blue-700">
-                <p>
-                  <strong>当前状态：</strong>展示模拟数据。实际使用时，数据将从友盟统计平台获取（非实时，有1天延迟）。
-                </p>
-                <p>
-                  <strong>数据范围：</strong>仅统计移动端数据（PC端流量较低，不纳入统计）。
-                </p>
-                <p>
-                  <strong>日期范围：</strong>可选择近7天、30天或90天的数据趋势，数据会根据选择的日期范围动态生成。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
