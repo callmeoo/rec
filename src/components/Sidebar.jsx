@@ -12,18 +12,18 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             label: '版本说明'
         },
         {
+            icon: Info,
+            label: '功能说明',
+            subItems: ['目标和数据基础', '推荐策略', '埋点说明', '可配置参数', '发布策略']
+        },
+        {
             icon: TrendingUp,
-            label: '为您推荐',
+            label: '客户端',
             subItems: ['为您推荐（PC端）', '为您推荐（移动端）']
         },
         {
-            icon: Info,
-            label: '功能说明',
-            subItems: ['目标和数据基础', '推荐策略', '埋点', '可配置参数', '发布策略']
-        },
-        {
             icon: BarChart2,
-            label: '推荐管理',
+            label: 'BMS推荐管理',
             subItems: ['推荐算法验证', '平台周转排行', '推荐数据看板']
         }
     ];
@@ -64,7 +64,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                     <Car className="text-white" size={20} />
                 </div>
                 {!collapsed && (
-                    <span className="ml-3 text-white font-semibold text-lg">二手车拍卖</span>
+                    <span className="ml-3 text-white font-semibold text-lg">交易平台为您推荐</span>
                 )}
             </div>
 

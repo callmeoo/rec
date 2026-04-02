@@ -106,7 +106,7 @@ export const FeatureOverview = () => {
           {activeDataTab === '买家画像' && (
             <div className="flex gap-6">
               {/* 左侧：图片 */}
-              <div className="flex-shrink-0 w-1/4">
+              <div className="flex-shrink-0" style={{ width: '30%' }}>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <p className="text-xs text-amber-700 mb-2 font-semibold">📌 参考截图</p>
                   <img 
@@ -533,15 +533,22 @@ export const TrackingDocs = () => {
 
   return (
     <DocPage
-      title="埋点"
+      title="埋点说明"
       icon={<BarChart3 className="text-blue-600" size={28} />}
       subtitle="埋点事件与数据采集说明"
     >
       <div className="prose prose-slate max-w-none text-sm leading-relaxed">
 
-        {/* 一、埋点文档 */}
-        <CollapsibleSection title="一、埋点文档" defaultOpen={true}>
-          <p className="text-slate-700 mb-2">技术看下有什么方式进行埋点：</p>
+        {/* 顶部重要提示 */}
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
+          <p className="text-red-600 font-semibold">
+            1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键
+          </p>
+        </div>
+
+        {/* 技术确定埋点方式 */}
+        <div className="mb-4">
+          <p className="text-red-600 font-semibold mb-2">技术确定埋点方式：</p>
           <a
             href="https://doc.weixin.qq.com/sheet/e3_AUEAhwa7AKcCNkvFjEA9WQrSBTH0y?scode=AG4AJAc6AAgreGuAYwAUEAhwa7AKc&tab=BB08J2"
             target="_blank"
@@ -550,17 +557,12 @@ export const TrackingDocs = () => {
           >
             【企微文档】推荐位埋点 https://doc.weixin.qq.com/sheet/e3_AUEAhwa7AKcCNkvFjEA9WQrSBTH0y?scode=AG4AJAc6AAgreGuAYwAUEAhwa7AKc&tab=BB08J2
           </a>
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 font-semibold">
-              1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键
-            </p>
-          </div>
-        </CollapsibleSection>
+        </div>
 
-        {/* 二、补充基准线 */}
-        <CollapsibleSection title="二、补充基准线" defaultOpen={true}>
+        {/* 一、补充基准线 */}
+        <CollapsibleSection title="一、补充基准线" defaultOpen={true}>
           <p className="text-slate-700 mb-4">
-            功能开发后，前端先发版，统计现有为您推荐数据（移动端）
+            埋点数据需功能开发后上线，目的是获取基础数据
           </p>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
@@ -592,8 +594,8 @@ export const TrackingDocs = () => {
           </div>
         </CollapsibleSection>
 
-        {/* 三、埋点事件清单 */}
-        <CollapsibleSection title="三、埋点事件清单" defaultOpen={true}>
+        {/* 二、埋点事件清单 */}
+        <CollapsibleSection title="二、埋点事件清单" defaultOpen={true}>
           <p className="text-slate-700 mb-3">
             唯一键：<code className="px-1.5 py-0.5 bg-slate-100 rounded text-xs font-mono">auction_id + buyer_id</code>
           </p>
@@ -625,17 +627,6 @@ export const TrackingDocs = () => {
           </div>
         </CollapsibleSection>
 
-        {/* 四、出价率计算公式 */}
-        <CollapsibleSection title="四、出价率计算公式">
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
-            <p className="text-lg font-semibold text-blue-800">
-              出价率 = 出价台次 / 曝光台次 × 100%
-            </p>
-            <p className="text-xs text-blue-600 mt-2">
-              统计范围：移动端推荐模块（一期） · 唯一键：auction_id + buyer_id
-            </p>
-          </div>
-        </CollapsibleSection>
 
       </div>
     </DocPage>
