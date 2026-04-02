@@ -556,7 +556,6 @@ const MobileRecommendationPage = ({ onVehicleClick }) => {
                   </ul>
                   <div className="ml-6 mt-2 space-y-1.5 text-slate-700">
                     <p>● 点击处理：toast提示"车辆状态有更新"后，"局部移除/置灰"该失效卡片，并自动将下方卡片上移补位；</p>
-                    <p>或者在顶部出现"有新车源，点击刷新"的提示条，买家点击"刷新"系统执行刷新。</p>
                   </div>
                 </div>
               </div>

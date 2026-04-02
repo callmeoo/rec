@@ -225,6 +225,7 @@ const DataDashboard = () => {
           </button>
           {!trendCollapsed && (
           <div className="px-6 pb-6">
+            <div className="overflow-y-auto" style={{ maxHeight: '480px' }}>
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
@@ -291,6 +292,7 @@ const DataDashboard = () => {
                 </tr>
               </tfoot>
             </table>
+            </div>
           </div>
           )}
         </div>

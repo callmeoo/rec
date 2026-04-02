@@ -9,6 +9,7 @@ const RecommendationPage = ({ onVehicleClick }) => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pcTab, setPcTab] = useState('现有样式');
+  const [newStyleTab, setNewStyleTab] = useState('未登录');
   const [filters, setFilters] = useState({
     priceRange: [0, 1000000],
     brands: [],
@@ -131,23 +132,46 @@ const RecommendationPage = ({ onVehicleClick }) => {
         </div>
       )}
 
-      {/* Tab2: 新样式 - 登录前 + 登录后 */}
+      {/* Tab2: 新样式 - 未登录/已登录 sub-tabs */}
       {pcTab === '新样式' && (
         <div className="flex flex-col flex-1">
-      <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4">
+
+      {/* Sub-tabs */}
+      <div className="flex gap-1 bg-slate-100 mx-6 mt-4 rounded-lg p-1 w-fit">
+        {['未登录', '已登录'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setNewStyleTab(tab)}
+            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
+              newStyleTab === tab
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4 mt-2">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
               <TrendingUp className="text-blue-600" size={24} />
               为您推荐
             </h1>
-
+            {newStyleTab === '未登录' && (
+              <p className="text-xs text-slate-500 mt-1">数据来源：平台周转 + 全站热销</p>
+            )}
+            {newStyleTab === '已登录' && (
+              <p className="text-xs text-slate-500 mt-1">数据来源：推荐集（画像匹配 + 平台周转 + 全站兜底）</p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Login Prompt Banner - 未登录引导条 */}
-      {!isLoggedIn && (
+      {/* Login Prompt Banner - 仅未登录时显示 */}
+      {newStyleTab === '未登录' && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-200 px-4 md:px-6 py-3">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3 flex-1">
@@ -157,9 +181,6 @@ const RecommendationPage = ({ onVehicleClick }) => {
               <div className="flex-1">
                 <p className="text-xs md:text-sm font-medium text-slate-900">
                   登录后查看您的专属推荐车源
-                </p>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  搜索结果页底部展示推荐车辆
                 </p>
               </div>
             </div>
