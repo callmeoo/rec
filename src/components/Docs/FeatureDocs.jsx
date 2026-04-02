@@ -516,19 +516,21 @@ export const RecommendStrategy = () => (
 
 // 埋点
 export const TrackingDocs = () => {
-  const trackingEvents = [
+  const mobileEvents = [
     { name: 'rec_show_m', trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。', fields: 'rec_version(推荐算法版本), rec_source(首页、搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: '移动端' },
-    { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
     { name: 'rec_click_m', trigger: 'Mob点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页、搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'rec_click_pc', trigger: 'PC端点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
-    { name: 'aucdetail_view_pc', trigger: 'PC端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
     { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
     { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_start_pc', trigger: 'PC端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
     { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_submit_pc', trigger: 'PC端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
     { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'bid_success_pc', trigger: 'PC端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' }
+  ];
+  const pcEvents = [
+    { name: 'rec_show_pc', trigger: 'PC端曝光次数：搜索结果页页底展示', fields: 'rec_version(推荐算法版本), rec_source(搜索无结果), item_id(推荐排位), rec_type(候选集类型：画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: 'PC端' },
+    { name: 'rec_click_pc', trigger: 'PC端点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'aucdetail_view_pc', trigger: 'PC端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_start_pc', trigger: 'PC端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_submit_pc', trigger: 'PC端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
+    { name: 'bid_success_pc', trigger: 'PC端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页/搜索无结果), item_id(推荐排位), (候选集类型：画像匹配、平台周转、全站兜底)', platform: 'PC端' },
   ];
 
   return (
@@ -539,30 +541,26 @@ export const TrackingDocs = () => {
     >
       <div className="prose prose-slate max-w-none text-sm leading-relaxed">
 
-        {/* 顶部重要提示 */}
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
-          <p className="text-red-600 font-semibold">
-            1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键
-          </p>
-        </div>
-
         {/* 技术确定埋点方式 */}
         <div className="mb-4">
           <p className="text-red-600 font-semibold mb-2">技术确定埋点方式：</p>
+          <p className="text-slate-700 mb-2">
+            1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键
+          </p>
           <a
             href="https://doc.weixin.qq.com/sheet/e3_AUEAhwa7AKcCNkvFjEA9WQrSBTH0y?scode=AG4AJAc6AAgreGuAYwAUEAhwa7AKc&tab=BB08J2"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 hover:underline break-all"
           >
-            【企微文档】推荐位埋点 https://doc.weixin.qq.com/sheet/e3_AUEAhwa7AKcCNkvFjEA9WQrSBTH0y?scode=AG4AJAc6AAgreGuAYwAUEAhwa7AKc&tab=BB08J2
+            【企微文档】推荐位埋点
           </a>
         </div>
 
         {/* 一、补充基准线 */}
         <CollapsibleSection title="一、补充基准线" defaultOpen={true}>
           <p className="text-slate-700 mb-4">
-            埋点数据需功能开发后上线，目的是获取基础数据
+            埋点数据需功能开发后上线，目的是获取现有"为您推荐"基础数据（曝光次数、点击次数、出价次数）
           </p>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
@@ -610,15 +608,25 @@ export const TrackingDocs = () => {
                 </tr>
               </thead>
               <tbody>
-                {trackingEvents.map((evt, idx) => (
+                {/* 移动端埋点 */}
+                {mobileEvents.map((evt) => (
                   <tr key={evt.name}>
                     <td className="border border-slate-300 px-3 py-2 font-mono text-xs text-slate-700 whitespace-nowrap">{evt.name}</td>
                     <td className="border border-slate-300 px-3 py-2 text-slate-700 text-xs">{evt.trigger}</td>
                     <td className="border border-slate-300 px-3 py-2 text-slate-700 text-xs">{evt.fields}</td>
                     <td className="border border-slate-300 px-3 py-2 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded text-xs ${evt.platform === '移动端' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
-                        {evt.platform}
-                      </span>
+                      <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">{evt.platform}</span>
+                    </td>
+                  </tr>
+                ))}
+                {/* PC端埋点 - 置灰，一期不开发 */}
+                {pcEvents.map((evt) => (
+                  <tr key={evt.name} className="bg-gray-100 text-gray-400">
+                    <td className="border border-slate-300 px-3 py-2 font-mono text-xs whitespace-nowrap">{evt.name}</td>
+                    <td className="border border-slate-300 px-3 py-2 text-xs">{evt.trigger}</td>
+                    <td className="border border-slate-300 px-3 py-2 text-xs">{evt.fields}</td>
+                    <td className="border border-slate-300 px-3 py-2 whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-500">{evt.platform}（一期不开发）</span>
                     </td>
                   </tr>
                 ))}
@@ -626,7 +634,6 @@ export const TrackingDocs = () => {
             </table>
           </div>
         </CollapsibleSection>
-
 
       </div>
     </DocPage>
