@@ -572,7 +572,7 @@ export const ConfigParams = () => {
           </div>
           <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
             <p className="font-semibold mb-1">权限说明：</p>
-            <p>产品经理/运营管理员：可查看、可编辑 · 系统管理员：可查看、可编辑、可查看变更记录 · 数据分析师：仅可查看</p>
+            <p>支持菜单权限配置、编辑按钮单独权限控制</p>
           </div>
         </div>
       )}
