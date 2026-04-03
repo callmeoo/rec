@@ -390,7 +390,6 @@ export const TrackingDocs = () => {
   const mobileEvents = [
     { name: 'rec_show_m', trigger: '移动端曝光次数：推荐位进入用户视口（曝光），能看到2台车辆；搜索无结果页曝光。曝光定义：车辆推荐卡片至少50%的面积进入用户可视区域，触发一次曝光事件；同一用户在同一会话内对同一车辆重复浏入，不重复计曝光。', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), rec_type(候选集类型：初始default、画像匹配profile_match、平台周转platform_cycle、全站兜底global_backup)', platform: '移动端' },
     { name: 'rec_click_m', trigger: 'Mob点击次数：用户点击推荐卡片', fields: 'rec_version(推荐算法版本), rec_source(首页home、搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
-    { name: 'aucdetail_view_m', trigger: '移动端详情页：进入车辆详情页', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
     { name: 'bid_start_m', trigger: '移动端点击出价次数：点击"我要出价"按钮', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
     { name: 'bid_submit_m', trigger: '移动端出价成功（同台车仅计算1次）：出价成功', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端' },
     { name: 'bid_success_m', trigger: '移动端车辆中标：车辆中标', fields: 'rec_version(推荐算法版本), auction_id(拍卖ID), vid(车辆ID), rec_source(首页home/搜索无结果search_no_result), item_id(推荐排位), (候选集类型：初始default、画像匹配、平台周转、全站兜底)', platform: '移动端', disabled: true },
@@ -416,7 +415,7 @@ export const TrackingDocs = () => {
         <div className="mb-4">
           <p className="text-red-600 font-semibold mb-2">技术确定埋点方式：</p>
           <p className="text-slate-700 mb-2">
-            1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键
+            1期可以仅做移动端埋点，暂不做PC端埋点，以 auction_id + buyer_id 为唯一键，用户未登录按 设备唯一识别 + buyer_id 为唯一键
           </p>
           <a
             href="https://doc.weixin.qq.com/sheet/e3_AUEAhwa7AKcCNkvFjEA9WQrSBTH0y?scode=AG4AJAc6AAgreGuAYwAUEAhwa7AKc&tab=BB08J2"
@@ -629,7 +628,7 @@ export const ConfigParams = () => {
             </table>
           </div>
           <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
-            <p>回滚规则：仅"待生效"或"草稿"状态可回滚，回滚后恢复为上一个"已生效"的配置值。</p>
+            <p>回滚规则：仅"待生效"状态可回滚，回滚后恢复为上一个"已生效"的配置值。</p>
           </div>
         </div>
       )}

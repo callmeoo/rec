@@ -284,7 +284,6 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                                       <th className="px-4 py-2 text-center text-xs font-medium text-slate-500">成交耗时</th>
                                       <th className="px-4 py-2 text-center text-xs font-medium text-slate-500">周转分</th>
                                       <th className="px-4 py-2 text-center text-xs font-medium text-slate-500">在拍数量</th>
-                                      <th className="px-4 py-2 text-center text-xs font-medium text-slate-500">操作</th>
                                     </tr>
                                   </thead>
                                   <tbody className="divide-y divide-slate-200">
@@ -307,19 +306,6 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                                           <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">
                                             {model.activeCount} 辆
                                           </span>
-                                        </td>
-                                        <td className="px-4 py-3 text-center">
-                                          {model.activeCount <= 1 ? (
-                                            <button
-                                              onClick={() => handleViewDetails(model.modelId)}
-                                              className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium"
-                                            >
-                                              查看详情
-                                              <ExternalLink size={12} />
-                                            </button>
-                                          ) : (
-                                            <span className="text-xs text-slate-400">-</span>
-                                          )}
                                         </td>
                                       </tr>
                                     ))}
