@@ -160,7 +160,7 @@ const TurnoverRanking = ({ onVehicleClick }) => {
                   <Clock size={12} className="text-orange-600" />
                   <span className="font-medium text-slate-700">耗时评分</span>
                 </div>
-                <p className="text-slate-500">100 - （中位数 / 最大耗时）× 100</p>
+                <p className="text-slate-500">(最大耗时 - 某车系耗时) / (最大耗时 - 最小耗时) × 100</p>
                 <p className="text-slate-400 mt-1">权重：30%</p>
               </div>
               <div className="bg-white rounded-lg p-3 shadow-sm">

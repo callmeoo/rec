@@ -509,13 +509,15 @@ export const TrackingDocs = () => {
 export const ConfigParams = () => {
   const [configTab, setConfigTab] = useState('配置总览');
   const [detailSubTab, setDetailSubTab] = useState('周转分相关');
+  const [editingConfig, setEditingConfig] = useState(null);
+  const [rollbackConfirm, setRollbackConfirm] = useState(null);
   const configTabs = ['配置总览', '变更记录', '需求说明'];
 
   return (
     <DocPage
       title="为您推荐配置"
       icon={<Settings className="text-blue-600" size={28} />}
-      subtitle="BMS → 推荐管理 → 参数配置（无需发布代码即可调整推荐策略）"
+      subtitle="BMS → 推荐管理 → 参数配置"
     >
       <div className="flex border-b border-slate-200 mb-6">
         {configTabs.map((tab) => (
@@ -541,7 +543,6 @@ export const ConfigParams = () => {
                   <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">参数名称</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">当前值</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">取值范围</th>
-                  <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">配置类型</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">生效时机</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">影响模块</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">操作</th>
@@ -549,21 +550,20 @@ export const ConfigParams = () => {
               </thead>
               <tbody>
                 {[
-                  ['二进宫判定周期', '30天', '14~90天', '整数输入框', '🔵 次日0点', '周转分计算'],
-                  ['周转分权重', '成交率0.7 / 耗时0.3', '各0~1，和为1', '双滑块（互斥）', '🔵 次日0点', '周转分计算'],
-                  ['用户画像统计周期', '60天', '60/90/120/180', '下拉单选', '🔵 次日0点', '买家画像'],
-                  ['样本充足判定', '上架≥6 / 成交≥3', '上架3~20 / 成交2~10', '双整数输入框', '🔵 次日0点', '周转分计算'],
-                  ['库存覆盖率', '15%', '10~20%', '滑块', '🟢 立即生效', '推荐位数量'],
-                ].map(([name, def, range, type, effect, module], i) => (
+                  ['二进宫判定周期', '30天', '14~90天', '🔵 次日0点', '周转分计算'],
+                  ['周转分权重', '成交率0.7 / 耗时0.3', '各0~1，和为1', '🔵 次日0点', '周转分计算'],
+                  ['用户画像统计周期', '60天', '60/90/120/180', '🔵 次日0点', '买家画像'],
+                  ['样本充足判定', '上架≥6 / 成交≥3', '上架3~20 / 成交2~10', '🔵 次日0点', '周转分计算'],
+                  ['库存覆盖率', '15%', '10~20%', '🟢 立即生效', '推荐位数量'],
+                ].map(([name, val, range, effect, module], i) => (
                   <tr key={i} className={i % 2 === 1 ? 'bg-slate-50' : ''}>
                     <td className="border border-slate-200 px-3 py-2 font-medium text-slate-800">{name}</td>
-                    <td className="border border-slate-200 px-3 py-2 text-center text-slate-600">{def}</td>
+                    <td className="border border-slate-200 px-3 py-2 text-center text-slate-600">{val}</td>
                     <td className="border border-slate-200 px-3 py-2 text-center text-slate-600">{range}</td>
-                    <td className="border border-slate-200 px-3 py-2 text-center text-slate-500">{type}</td>
                     <td className="border border-slate-200 px-3 py-2 text-center">{effect}</td>
                     <td className="border border-slate-200 px-3 py-2 text-center text-slate-500">{module}</td>
                     <td className="border border-slate-200 px-3 py-2 text-center">
-                      <span className="text-blue-600 text-xs cursor-pointer hover:underline">编辑</span>
+                      <button onClick={() => setEditingConfig({ name, val, range, effect })} className="text-blue-600 text-xs cursor-pointer hover:underline">编辑</button>
                     </td>
                   </tr>
                 ))}
@@ -607,8 +607,11 @@ export const ConfigParams = () => {
                       <span className={`px-2 py-0.5 rounded text-xs font-medium ${status === '待生效' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>{status}</span>
                     </td>
                     <td className="border border-slate-200 px-3 py-2 text-center">
-                      <span className="text-blue-600 text-xs cursor-pointer">查看</span>
-                      {canRollback && <span className="text-red-600 text-xs cursor-pointer ml-2">回滚</span>}
+                      {canRollback ? (
+                        <button onClick={() => setRollbackConfirm(content)} className="text-red-600 text-xs cursor-pointer hover:underline">回滚</button>
+                      ) : (
+                        <span className="text-xs text-slate-400">-</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -699,6 +702,46 @@ export const ConfigParams = () => {
       )}
 
       </div>
+
+      {/* 编辑弹框 */}
+      {editingConfig && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setEditingConfig(null)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">编辑 — {editingConfig.name}</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-slate-500 block mb-1">当前值</label>
+                <input className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={editingConfig.val} />
+              </div>
+              <div className="text-xs text-slate-500">
+                <p>取值范围：{editingConfig.range}</p>
+                <p className="mt-1">生效时机：{editingConfig.effect}</p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button onClick={() => setEditingConfig(null)} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">取消</button>
+              <button onClick={() => { alert('保存成功（Demo）'); setEditingConfig(null); }} className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">保存并生效</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 回滚确认弹框 */}
+      {rollbackConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setRollbackConfirm(null)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-96 max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">⚠️ 确认回滚配置？</h3>
+            <p className="text-sm text-slate-700 mb-2">将回滚以下配置：</p>
+            <p className="text-sm text-slate-600 bg-slate-50 rounded p-2 mb-3">{rollbackConfirm}</p>
+            <p className="text-xs text-slate-500 mb-4">回滚后，该变更记录将被标记为"已失效"，恢复为上一个已生效的配置值。</p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setRollbackConfirm(null)} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">取消</button>
+              <button onClick={() => { alert('回滚成功（Demo）'); setRollbackConfirm(null); }} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">确认回滚</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </DocPage>
   );
 }
