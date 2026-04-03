@@ -47,7 +47,7 @@ const DataDashboard = () => {
         totalClicks: totalClicks,
         ctr: parseFloat(ctr),
         bidRate: parseFloat(bidRate),
-        avgBidAmount: (6 + Math.random() * 4).toFixed(1)
+        avgBidAmount: Math.floor(Math.random() * 5000) + 3000
       },
       trend: {
         dates: dates,
@@ -184,7 +184,7 @@ const DataDashboard = () => {
               <Users size={18} className="text-red-500" />
             </div>
             <div className="text-2xl font-bold text-slate-900">
-              {dashboardData.overview.avgBidAmount}万
+              {dashboardData.overview.avgBidAmount.toLocaleString()}次
             </div>
           </div>
         </div>

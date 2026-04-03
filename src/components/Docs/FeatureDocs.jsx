@@ -60,7 +60,7 @@ export const FeatureOverview = () => {
             <li>辅助目标：猜你喜欢模块的CTR较基线提升 &gt; 5%。</li>
           </ul>
           <p className="text-slate-700 mb-2">
-            统计口径：出价率 = 直接/间接出价台次 / 推荐模块曝光台次，同一买家同一车辆仅计1次。
+            统计口径：出价率 = 推荐位带来的出价台次（排重） / 推荐模块曝光台次（排重），同一买家同一车辆仅计1次。
           </p>
 
           <h4 className="text-sm font-semibold text-slate-800 mt-4 mb-2">曝光定义：</h4>
