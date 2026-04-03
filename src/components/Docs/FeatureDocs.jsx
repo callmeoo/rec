@@ -508,7 +508,8 @@ export const TrackingDocs = () => {
 // 可配置参数
 export const ConfigParams = () => {
   const [configTab, setConfigTab] = useState('配置总览');
-  const configTabs = ['配置总览', '周转分相关', '推荐数量', '变更记录'];
+  const [detailSubTab, setDetailSubTab] = useState('周转分相关');
+  const configTabs = ['配置总览', '变更记录', '需求说明'];
 
   return (
     <DocPage
@@ -538,11 +539,12 @@ export const ConfigParams = () => {
               <thead>
                 <tr className="bg-slate-100">
                   <th className="border border-slate-200 px-3 py-2 text-left font-semibold text-slate-700">参数名称</th>
-                  <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">默认值</th>
+                  <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">当前值</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">取值范围</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">配置类型</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">生效时机</th>
                   <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">影响模块</th>
+                  <th className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700">操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -551,8 +553,6 @@ export const ConfigParams = () => {
                   ['周转分权重', '成交率0.7 / 耗时0.3', '各0~1，和为1', '双滑块（互斥）', '🔵 次日0点', '周转分计算'],
                   ['用户画像统计周期', '60天', '60/90/120/180', '下拉单选', '🔵 次日0点', '买家画像'],
                   ['样本充足判定', '上架≥6 / 成交≥3', '上架3~20 / 成交2~10', '双整数输入框', '🔵 次日0点', '周转分计算'],
-                  ['推荐数量-最小值', '16台', '15~30', '整数输入框', '🟢 立即生效', '推荐位数量'],
-                  ['推荐数量-最大值', '40台', '30~60', '整数输入框', '🟢 立即生效', '推荐位数量'],
                   ['库存覆盖率', '15%', '10~20%', '滑块', '🟢 立即生效', '推荐位数量'],
                 ].map(([name, def, range, type, effect, module], i) => (
                   <tr key={i} className={i % 2 === 1 ? 'bg-slate-50' : ''}>
@@ -562,6 +562,9 @@ export const ConfigParams = () => {
                     <td className="border border-slate-200 px-3 py-2 text-center text-slate-500">{type}</td>
                     <td className="border border-slate-200 px-3 py-2 text-center">{effect}</td>
                     <td className="border border-slate-200 px-3 py-2 text-center text-slate-500">{module}</td>
+                    <td className="border border-slate-200 px-3 py-2 text-center">
+                      <span className="text-blue-600 text-xs cursor-pointer hover:underline">编辑</span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -571,86 +574,6 @@ export const ConfigParams = () => {
             <p className="font-semibold mb-1">权限说明：</p>
             <p>产品经理/运营管理员：可查看、可编辑 · 系统管理员：可查看、可编辑、可查看变更记录 · 数据分析师：仅可查看</p>
           </div>
-        </div>
-      )}
-
-      {/* 周转分相关 */}
-      {configTab === '周转分相关' && (
-        <div className="space-y-6">
-          <CollapsibleSection title="二进宫判定周期" defaultOpen={true}>
-            <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">second_listing_interval_days</code></p>
-            <p className="text-slate-700 mb-2">判定车辆是否为"二进宫"（重新上架）的时间间隔阈值。</p>
-            <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 mt-2">
-              <p>如果（本次上架时间 - 上次结束时间）&gt; 该配置值 → 判定为"二进宫"，重置成交耗时计算周期</p>
-              <p>否则 → 视为连续拍卖，累计计算成交耗时</p>
-            </div>
-            <p className="text-xs text-slate-500 mt-2">默认值：30天 · 范围：14~90天 · 🔵 次日0点生效</p>
-          </CollapsibleSection>
-
-          <CollapsibleSection title="周转分权重" defaultOpen={true}>
-            <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">turnover_score_weights</code></p>
-            <p className="text-slate-700 mb-2">周转分 = 成交率评分 × 权重A + 耗时评分 × 权重B（权重A + 权重B = 1.0）</p>
-            <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 mt-2">
-              <p>• 成交率权重越高 → 越倾向"能卖出"的车型</p>
-              <p>• 耗时权重越高 → 越倾向"卖得快"的车型</p>
-              <p className="mt-1">拖动成交率滑块，耗时权重自动调整为 1 - 成交率权重</p>
-            </div>
-            <p className="text-xs text-slate-500 mt-2">默认值：成交率0.7 / 耗时0.3 · 步长0.1 · 🔵 次日0点生效 · 支持模拟计算TOP100车型变化</p>
-          </CollapsibleSection>
-
-          <CollapsibleSection title="用户画像统计周期" defaultOpen={true}>
-            <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">user_profile_stat_days</code></p>
-            <p className="text-slate-700 mb-2">买家画像统计出价行为的回溯天数，统计内容包括：国别、品牌、车系、价格段、车龄偏好。</p>
-            <p className="text-xs text-slate-500 mt-2">默认值：60天 · 可选：60/90/120/180天 · 🔵 次日0点生效</p>
-          </CollapsibleSection>
-
-          <CollapsibleSection title="样本充足判定" defaultOpen={true}>
-            <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">sample_sufficient_threshold</code></p>
-            <p className="text-slate-700 mb-2">车型周转分计算的最小样本量要求。满足两个条件的车型才参与周转分计算。</p>
-            <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 mt-2">
-              <p>• 阈值过高 → 有效车型减少</p>
-              <p>• 阈值过低 → 数据不稳定</p>
-              <p className="mt-1">验证规则：成交数下限 ≤ 上架数下限</p>
-            </div>
-            <p className="text-xs text-slate-500 mt-2">默认值：上架≥6台 / 成交≥3台 · 🔵 次日0点生效 · 支持模拟计算样本充足车型数变化</p>
-          </CollapsibleSection>
-        </div>
-      )}
-
-      {/* 推荐数量 */}
-      {configTab === '推荐数量' && (
-        <div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-            <p className="text-xs text-green-700">🟢 以下配置保存后立即生效，下次推荐请求即使用新配置</p>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-4 mb-4">
-            <h4 className="text-sm font-semibold text-slate-800 mb-3">推荐数量动态调整</h4>
-            <p className="text-slate-700 mb-3 text-xs">
-              公式：最终推荐位数量 = max(最小值, min(最大值, 当前库存 × 库存覆盖率))
-            </p>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-slate-50 rounded-lg p-3">
-                <p className="text-xs text-slate-500 mb-1">最小推荐位数量</p>
-                <p className="text-lg font-bold text-slate-900">16 台</p>
-                <p className="text-xs text-slate-400">范围：15~30</p>
-              </div>
-              <div className="bg-slate-50 rounded-lg p-3">
-                <p className="text-xs text-slate-500 mb-1">最大推荐位数量</p>
-                <p className="text-lg font-bold text-slate-900">40 台</p>
-                <p className="text-xs text-slate-400">范围：30~60</p>
-              </div>
-              <div className="bg-slate-50 rounded-lg p-3">
-                <p className="text-xs text-slate-500 mb-1">库存覆盖率</p>
-                <p className="text-lg font-bold text-slate-900">15%</p>
-                <p className="text-xs text-slate-400">范围：10~20%</p>
-              </div>
-            </div>
-            <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-700">
-              <p className="font-semibold">计算示例（当前库存200辆）：</p>
-              <p>基础数量 = 200 × 15% = 30台 → 最终数量 = max(16, min(40, 30)) = 30台</p>
-            </div>
-          </div>
-          <p className="text-xs text-slate-500">验证规则：最小值 &lt; 最大值 · 库存覆盖率步长1%</p>
         </div>
       )}
 
@@ -672,7 +595,7 @@ export const ConfigParams = () => {
               <tbody>
                 {[
                   ['2026-01-22 10:30', '张三', '周转分权重：0.7/0.3 → 0.6/0.4', '2026-01-23 00:00', '待生效', true],
-                  ['2026-01-22 09:15', '李四', '推荐数量最大值：40台 → 45台', '立即', '已生效', false],
+                  ['2026-01-22 09:15', '李四', '库存覆盖率：15% → 18%', '立即', '已生效', false],
                   ['2026-01-20 14:20', '王五', '二进宫判定周期：30天 → 45天', '2026-01-21 00:00', '已生效', false],
                 ].map(([time, op, content, effect, status, canRollback], i) => (
                   <tr key={i} className={i % 2 === 1 ? 'bg-slate-50' : ''}>
@@ -698,12 +621,88 @@ export const ConfigParams = () => {
         </div>
       )}
 
+      {/* 需求说明 */}
+      {configTab === '需求说明' && (
+        <div>
+          <div className="flex gap-1 bg-slate-100 rounded-lg p-1 w-fit mb-5">
+            {['周转分相关', '推荐数量'].map((tab) => (
+              <button key={tab} onClick={() => setDetailSubTab(tab)}
+                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${detailSubTab === tab ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >{tab}</button>
+            ))}
+          </div>
+
+          {detailSubTab === '周转分相关' && (
+            <div className="space-y-6">
+              <CollapsibleSection title="二进宫判定周期" defaultOpen={true}>
+                <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">second_listing_interval_days</code></p>
+                <p className="text-slate-700 mb-2">判定车辆是否为"二进宫"（重新上架）的时间间隔阈值。</p>
+                <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 mt-2">
+                  <p>如果（本次上架时间 - 上次结束时间）&gt; 该配置值 → 判定为"二进宫"，重置成交耗时计算周期</p>
+                  <p>否则 → 视为连续拍卖，累计计算成交耗时</p>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">默认值：30天 · 范围：14~90天 · 🔵 次日0点生效</p>
+              </CollapsibleSection>
+              <CollapsibleSection title="周转分权重" defaultOpen={true}>
+                <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">turnover_score_weights</code></p>
+                <p className="text-slate-700 mb-2">周转分 = 成交率评分 × 权重A + 耗时评分 × 权重B（权重A + 权重B = 1.0）</p>
+                <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 mt-2">
+                  <p>• 成交率权重越高 → 越倾向"能卖出"的车型</p>
+                  <p>• 耗时权重越高 → 越倾向"卖得快"的车型</p>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">默认值：成交率0.7 / 耗时0.3 · 步长0.1 · 🔵 次日0点生效 · 支持模拟计算</p>
+              </CollapsibleSection>
+              <CollapsibleSection title="用户画像统计周期" defaultOpen={true}>
+                <p className="text-slate-700 mb-2">买家画像统计出价行为的回溯天数。</p>
+                <p className="text-xs text-slate-500 mt-2">默认值：60天 · 可选：60/90/120/180天 · 🔵 次日0点生效</p>
+              </CollapsibleSection>
+              <CollapsibleSection title="样本充足判定" defaultOpen={true}>
+                <p className="text-slate-700 mb-2">车型周转分计算的最小样本量要求。</p>
+                <p className="text-xs text-slate-500 mt-2">默认值：上架≥6台 / 成交≥3台 · 🔵 次日0点生效 · 支持模拟计算</p>
+              </CollapsibleSection>
+            </div>
+          )}
+
+          {detailSubTab === '推荐数量' && (
+            <div>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                <p className="text-xs text-green-700">🟢 以下配置保存后立即生效</p>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-lg p-4">
+                <h4 className="text-sm font-semibold text-slate-800 mb-3">推荐数量动态调整</h4>
+                <p className="text-slate-700 mb-3 text-xs">公式：最终推荐位数量 = max(最小值, min(最大值, 当前库存 × 库存覆盖率))</p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-slate-50 rounded-lg p-3">
+                    <p className="text-xs text-slate-500 mb-1">最小推荐位数量</p>
+                    <p className="text-lg font-bold text-slate-900">16 台</p>
+                    <p className="text-xs text-slate-400">范围：15~30</p>
+                  </div>
+                  <div className="bg-slate-50 rounded-lg p-3">
+                    <p className="text-xs text-slate-500 mb-1">最大推荐位数量</p>
+                    <p className="text-lg font-bold text-slate-900">40 台</p>
+                    <p className="text-xs text-slate-400">范围：30~60</p>
+                  </div>
+                  <div className="bg-slate-50 rounded-lg p-3">
+                    <p className="text-xs text-slate-500 mb-1">库存覆盖率</p>
+                    <p className="text-lg font-bold text-slate-900">15%</p>
+                    <p className="text-xs text-slate-400">范围：10~20%</p>
+                  </div>
+                </div>
+                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-700">
+                  <p className="font-semibold">计算示例（当前库存200辆）：</p>
+                  <p>基础数量 = 200 × 15% = 30台 → 最终数量 = max(16, min(40, 30)) = 30台</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       </div>
     </DocPage>
   );
-};
+}
 
-// 发布策略
 export const ReleaseStrategy = () => {
   const [activePhase, setActivePhase] = useState('阶段一');
   const phases = ['阶段一', '阶段二', '回滚方案'];
