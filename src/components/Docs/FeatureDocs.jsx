@@ -550,7 +550,7 @@ export const ConfigParams = () => {
               </thead>
               <tbody>
                 {[
-                  ['二进宫判定周期', '30天', '14~90天', '🔵 次日0点', '周转分计算'],
+                  ['二进宫判定周期', '30天', '3~30天', '🔵 次日0点', '周转分计算'],
                   ['周转分权重', '成交率0.7 / 耗时0.3', '各0~1，和为1', '🔵 次日0点', '周转分计算'],
                   ['用户画像统计周期', '60天', '60/90/120/180', '🔵 次日0点', '买家画像'],
                   ['样本充足判定', '上架≥6 / 成交≥3', '上架3~20 / 成交2~10', '🔵 次日0点', '周转分计算'],
@@ -644,7 +644,7 @@ export const ConfigParams = () => {
                   <p>如果（本次上架时间 - 上次结束时间）&gt; 该配置值 → 判定为"二进宫"，重置成交耗时计算周期</p>
                   <p>否则 → 视为连续拍卖，累计计算成交耗时</p>
                 </div>
-                <p className="text-xs text-slate-500 mt-2">默认值：30天 · 范围：14~90天 · 🔵 次日0点生效</p>
+                <p className="text-xs text-slate-500 mt-2">默认值：30天 · 范围：3~30天 · 🔵 次日0点生效</p>
               </CollapsibleSection>
               <CollapsibleSection title="周转分权重" defaultOpen={true}>
                 <p className="text-slate-700 mb-2">参数键名：<code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">turnover_score_weights</code></p>

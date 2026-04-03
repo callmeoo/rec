@@ -331,7 +331,7 @@ const BuyerRecommendationVerify = () => {
               <User className="text-blue-600" size={18} />
               买家画像分析
               <span className="text-xs font-normal text-slate-500">
-                （基于最近90天 {buyerProfile.bidCount} 次出价，{buyerProfile.bidVehicleCount} 台车辆）
+                （基于最近60天 {buyerProfile.bidCount} 次出价，{buyerProfile.bidVehicleCount} 台车辆）
               </span>
             </h2>
             <button
