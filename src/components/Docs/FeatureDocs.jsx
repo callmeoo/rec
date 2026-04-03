@@ -362,11 +362,21 @@ export const RecommendStrategy = () => {
           </div>
 
           <h3 className="text-base font-semibold text-slate-800 mb-2">异常处理</h3>
-          <p className="text-slate-700 mb-2">为保障系统高可用，当推荐服务出现故障，接口超时未返回，则直接调用<span className="font-semibold">缓存</span>中的上一次计算结果。</p>
+          <p className="text-slate-700 mb-3">为保障系统高可用，当推荐服务出现故障时，按以下降级链路处理：</p>
+
+          <h4 className="text-sm font-semibold text-slate-800 mb-2">1. 接口超时处理</h4>
+          <p className="text-slate-700 mb-4">接口响应超过 500ms 未返回，判定为超时，立即终止请求，进入降级流程。</p>
+
+          <h4 className="text-sm font-semibold text-slate-800 mb-2">2. 降级链路（按优先级依次执行）</h4>
+          <ul className="list-disc list-inside space-y-1.5 text-slate-700 mb-4">
+            <li><span className="font-semibold">第一级：读取缓存</span> → 调用缓存中的上一次计算结果，缓存过期时间建议设为 <span className="font-semibold text-red-600">30分钟</span>（暂定）。</li>
+            <li><span className="font-semibold">第二级：兜底策略</span> → 若缓存不存在或已过期，则调用候选集3（全站热销兜底）进行补充。</li>
+          </ul>
+
+          <h4 className="text-sm font-semibold text-slate-800 mb-2">3. 结果处理</h4>
           <ul className="list-disc list-inside space-y-1.5 text-slate-700">
-            <li>在读取缓存列表后，将状态不符（已拍卖结束）的车辆从缓存中过滤</li>
-            <li>若数量不足，则用候选集3（全站热销兜底）进行补充</li>
-            <li>三个候选集合并后仍不足16台时，<span className="font-semibold">保持实际数量展示，不强制补满</span></li>
+            <li>读取缓存列表后，将状态不符（已拍卖结束）的车辆从缓存中过滤。</li>
+            <li>若过滤后数量不足，<span className="font-semibold">保持实际数量展示，不强制补满</span>。</li>
           </ul>
         </div>
       )}
