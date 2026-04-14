@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, ChevronDown, ChevronRight, ExternalLink, Award, Clock, Percent, RefreshCw } from 'lucide-react';
 
+// 周转排行统计周期可选值（天）
+const STAT_PERIOD_OPTIONS = [60, 90, 120, 180];
+
 const TurnoverRanking = ({ onVehicleClick }) => {
   const [rankings, setRankings] = useState([]);
   const [expandedSeries, setExpandedSeries] = useState({});
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [statPeriod, setStatPeriod] = useState(60); // 默认60天，对应配置项 turnover_ranking_stat_days
 
   // 计算分页数据
   const totalPages = Math.ceil(rankings.length / pageSize);
@@ -59,12 +63,13 @@ const TurnoverRanking = ({ onVehicleClick }) => {
   };
 
   useEffect(() => {
-    // 模拟API调用
+    // 模拟API调用，传入统计周期参数
+    setLoading(true);
     setTimeout(() => {
       setRankings(generateMockData());
       setLoading(false);
     }, 800);
-  }, []);
+  }, [statPeriod]);
 
   const toggleSeries = (seriesId) => {
     setExpandedSeries(prev => ({
@@ -124,9 +129,22 @@ const TurnoverRanking = ({ onVehicleClick }) => {
               全平台车系周转分排行
             </h1>
             <p className="text-sm text-slate-500 mt-1">
-              基于全站维度展示车源的周转效率排名，用于运营自查模型规则
+              基于全站维度展示车源的周转效率排名，用于运营自查模型规则（统计周期：近{statPeriod}天）
             </p>
           </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-600 whitespace-nowrap">统计周期</span>
+              <select
+                value={statPeriod}
+                onChange={(e) => { setStatPeriod(Number(e.target.value)); setCurrentPage(1); }}
+                className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {STAT_PERIOD_OPTIONS.map((days) => (
+                  <option key={days} value={days}>近{days}天</option>
+                ))}
+              </select>
+            </div>
           <button
             onClick={handleManualUpdate}
             disabled={loading}
@@ -135,6 +153,7 @@ const TurnoverRanking = ({ onVehicleClick }) => {
             <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
             <span>手动更新</span>
           </button>
+          </div>
         </div>
       </div>
 
